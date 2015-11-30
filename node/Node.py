@@ -14,6 +14,7 @@ class Node(object):
         self.stop = 500
         self.left_child = None
         self.right_child = None
+        print(self.data.__name__)
         
     def split(self):
         if len(self.data.df.index) > self.stop:
