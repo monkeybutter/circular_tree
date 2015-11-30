@@ -12,10 +12,10 @@ def tree_pprinter(node):
 
         if anode.split_var is not None:
             print("({}) {}, {}".format(len(anode.data.df.index), anode.split_var,
-                                       anode.data.var_desc[anode.split_var]['bounds'][0]))
+                                       anode.data.var_desc[anode.split_var]['bounds']))
         else:
             print("({}) Leaf {}, {}".format(len(anode.data.df.index),
-                                     anode.data.var_desc['gfs_wind_spd']['bounds'][0],
+                                     anode.data.var_desc['gfs_wind_spd']['bounds'],
                                     np.var(anode.data.df[anode.data.class_var].values)))
 
         if anode.left_child is not None:
@@ -52,7 +52,7 @@ def tree_planter(df, class_var, input_vars, var_types):
 
         #data = ClassicData(df, class_var, var_desc)
         data = SubsetData(df, class_var, var_desc)
-        node = Node(data)
+        node = Node(data, stop=3)
         node.split()
 
         return node

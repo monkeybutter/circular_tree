@@ -35,13 +35,13 @@ class SubsetData(Data):
         self.df.index = range(0, len(self.df))
         
     def get_best_split(self):
-        best_split = {'var_name': None, 'score': 0.0, 'index': [0,0]}
+        best_split = {'var_name': None, 'score': 0.0, 'index': [0, 0]}
 
         for input_var in list(self.var_desc.keys()):
             self.sort_by(input_var)
             for (i, left, right) in self:
                 score = get_score(left, right)
                 if score > best_split['score']:
-                    best_split.update({'var_name': input_var, 'score': score, 'index': i})
+                    best_split.update({'var_name': input_var, 'score': score, 'index': i[:]})
 
         return best_split
