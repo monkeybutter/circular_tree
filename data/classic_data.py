@@ -33,7 +33,6 @@ class ClassicData(Data):
         for input_var in list(self.var_desc.keys()):
             self.sort_by(input_var)
             for (i, left, right) in self:
-                print(i)
                 score = get_score(left, right)
                 if score > best_split['score']:
                     best_split.update({'var_name': input_var, 'score': score, 'index': i})

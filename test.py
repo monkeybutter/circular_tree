@@ -13,9 +13,21 @@ class_var = np.concatenate((np.random.normal(10, .1, 2),
                             np.random.normal(60, .1, 3)), axis=0)
 """
 # Test Subset Tree
-input_var1 = np.arange(0, 6)
+input_var1 = np.arange(0, 150)
+
+"""
 class_var = np.insert(np.random.normal(10, .1, 3), 1,
                        np.random.normal(50, .1, 3))
+"""
+
+top_sect = np.insert(np.random.normal(90, .1, 30), 25,
+                       np.random.normal(100, .1, 20))
+
+low_sect = np.insert(np.random.normal(0, .1, 85), 55,
+                       np.random.normal(10, .1, 15))
+
+class_var = np.insert(low_sect, 75, top_sect)
+class_var[10:30] = np.random.normal(3, .1, 20)
 
 df_array = np.vstack((input_var1, class_var)).T
 df = pd.DataFrame(df_array, columns=['gfs_wind_spd', 'metar_wind_spd'])
