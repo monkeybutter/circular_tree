@@ -27,7 +27,7 @@ def bound_generator(data, split_index, bounds):
                     inner_bounds.append((split_value1, split_value2))
                     outer_bounds.append((split_value2, bound[1]))
 
-        else:
+        else: # This part is not tested!
             if not is_in_bounds(data[split_index[1]], bound):
                 inner_bounds.append(bound)
 
