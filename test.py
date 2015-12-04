@@ -23,7 +23,7 @@ class_var = np.insert(np.random.normal(10, .1, 3), 1,
 top_sect = np.insert(np.random.normal(90, .1, 30), 25,
                        np.random.normal(100, .1, 20))
 
-low_sect = np.insert(np.random.normal(0, .1, 85), 55,
+low_sect = np.insert(np.random.normal(350, .1, 85), 55,
                        np.random.normal(10, .1, 15))
 
 class_var = np.insert(low_sect, 75, top_sect)
@@ -35,7 +35,7 @@ df = pd.DataFrame(df_array, columns=['gfs_wind_spd', 'metar_wind_spd'])
 input_vars = ['gfs_wind_spd']
 class_var = 'metar_wind_spd'
 
-type_vars = ['lin', 'lin']
+type_vars = ['cir', 'lin']
 
 tree = tree_planter(df, class_var, input_vars, type_vars)
 

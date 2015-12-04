@@ -29,10 +29,6 @@ class SubsetData(Data):
             return (self.iter_i, self.df.iloc[self.iter_i[0]:self.iter_i[1]][self.class_var].values,
                     np.concatenate((self.df.iloc[:self.iter_i[0]][self.class_var].values, 
                                     self.df.iloc[self.iter_i[1]:][self.class_var].values), axis=0))
-
-    def sort_by(self, col_name):
-        self.df = self.df.sort_values(col_name)
-        self.df.index = range(0, len(self.df))
         
     def get_best_split(self):
         best_split = {'var_name': None, 'score': 0.0, 'index': [0, 0]}

@@ -8,6 +8,8 @@ def bound_generator(data, split_index, bounds):
 
     outer = True
 
+    print(data, split_index, bounds)
+
     split_value1 = (data[split_index[0]-1] + data[split_index[0]])/2.0
     split_value2 = (data[split_index[1]-1] + data[split_index[1]])/2.0
 

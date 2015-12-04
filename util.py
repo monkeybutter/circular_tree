@@ -48,7 +48,7 @@ def tree_planter(df, class_var, input_vars, var_types):
 
         var_desc = {}
         for input_var in input_vars:
-            var_desc[input_var] = {"name": input_var, "type": "linear", "bounds": [[-np.inf, np.inf]]}
+            var_desc[input_var] = {"name": input_var, "type": "cir", "bounds": [[-np.inf, np.inf]]}
 
         #data = ClassicData(df, class_var, var_desc)
         data = SubsetData(df, class_var, var_desc)
