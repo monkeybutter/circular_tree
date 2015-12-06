@@ -17,7 +17,7 @@ class SubsetData(Data):
     
     def __next__(self):
         
-        if self.iter_i == [len(self.df.index)-1, len(self.df.index)]:
+        if self.iter_i == [len(self.df.index)-2, len(self.df.index)-1]:
             raise StopIteration
         else:
             if self.iter_i[0] < self.iter_i[1]-1:

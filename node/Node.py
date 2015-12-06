@@ -44,15 +44,18 @@ class Node(object):
                     self.right_child.split()
 
                 elif self.data.__class__.__name__ == "SubsetData":
+
                     outer_bounds, inner_bounds = bound_generator(self.data.df[split["var_name"]].values,
                                                                  split['index'],
                                                                  self.data.var_desc[split["var_name"]]["bounds"])
 
                     left_desc = copy.deepcopy(self.data.var_desc)
                     left_desc[split["var_name"]]["bounds"] = inner_bounds
+
                     self.left_child = Node(SubsetData(self.data.df.iloc[split['index'][0]:split['index'][1]],
                                                       self.data.class_var, left_desc), self.stop, self.level+1)
 
+                    #print(self.left_child.data.df[split["var_name"]].values)
                     self.left_child.split()
 
                     right_desc = copy.deepcopy(self.data.var_desc)
