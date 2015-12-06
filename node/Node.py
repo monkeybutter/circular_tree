@@ -2,7 +2,7 @@ import copy
 import pandas as pd
 from data.classic_data import ClassicData
 from data.subset_data import SubsetData
-from node.util import bound_generator
+from node.util import bound_generator_lin, bound_generator_cir
 
 class Node(object):
     __class_description__ = """Class modelling the actual structure of a binary tree node"""
@@ -22,7 +22,6 @@ class Node(object):
 
             if split['score'] > 0.5:
                 self.split_var = split["var_name"]
-                self.data.sort_by(self.split_var)
 
                 if self.data.__class__.__name__ == "ClassicData":
 
@@ -45,9 +44,17 @@ class Node(object):
 
                 elif self.data.__class__.__name__ == "SubsetData":
 
-                    outer_bounds, inner_bounds = bound_generator(self.data.df[split["var_name"]].values,
-                                                                 split['index'],
-                                                                 self.data.var_desc[split["var_name"]]["bounds"])
+                    if self.data.var_desc[split["var_name"]]["type"] == "lin":
+
+                        outer_bounds, inner_bounds = bound_generator_lin(self.data.df[split["var_name"]].values,
+                                                                     split['index'],
+                                                                     self.data.var_desc[split["var_name"]]["bounds"])
+
+                    elif self.data.var_desc[split["var_name"]]["type"] == "cir":
+
+                        outer_bounds, inner_bounds = bound_generator_cir(self.data.df[split["var_name"]].values,
+                                                                     split['index'],
+                                                                     self.data.var_desc[split["var_name"]]["bounds"])
 
                     left_desc = copy.deepcopy(self.data.var_desc)
                     left_desc[split["var_name"]]["bounds"] = inner_bounds
@@ -55,7 +62,6 @@ class Node(object):
                     self.left_child = Node(SubsetData(self.data.df.iloc[split['index'][0]:split['index'][1]],
                                                       self.data.class_var, left_desc), self.stop, self.level+1)
 
-                    #print(self.left_child.data.df[split["var_name"]].values)
                     self.left_child.split()
 
                     right_desc = copy.deepcopy(self.data.var_desc)

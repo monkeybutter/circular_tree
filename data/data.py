@@ -22,8 +22,8 @@ class Data(object):
             end = self.var_desc[col_name]["bounds"][-1][1]
 
             if start > end:
-                self.df = self.df.query('{} < {} < 360.0'.format(start, col_name)).copy().append(
-                    self.df.query('0.0 < {} < {}'.format(col_name, start)).copy())
+                self.df = self.df.query('{} <= {} <= 360.0'.format(start, col_name)).copy().append(
+                    self.df.query('0.0 <= {} < {}'.format(col_name, end)).copy())
 
             self.df.index = range(0, len(self.df))
 

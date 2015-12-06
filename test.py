@@ -2,40 +2,26 @@ from util import tree_planter, tree_pprinter
 import numpy as np
 import pandas as pd
 
-
-
-"""
-# Test Classic Tree
-input_var1 = np.arange(0, 10)
-class_var = np.concatenate((np.random.normal(10, .1, 2),
-                            np.random.normal(15, .1, 2),
-                            np.random.normal(50, .1, 3),
-                            np.random.normal(60, .1, 3)), axis=0)
-"""
 # Test Subset Tree
-input_var1 = np.arange(0, 150)
+input_var1 = np.arange(0, 360)
 
-"""
-class_var = np.insert(np.random.normal(10, .1, 3), 1,
-                       np.random.normal(50, .1, 3))
-"""
+class_var = np.ones(360)
 
-top_sect = np.insert(np.random.normal(90, .1, 30), 25,
-                       np.random.normal(100, .1, 20))
-
-low_sect = np.insert(np.random.normal(350, .1, 85), 55,
-                       np.random.normal(10, .1, 15))
-
-class_var = np.insert(low_sect, 75, top_sect)
-class_var[10:30] = np.random.normal(3, .1, 20)
+class_var[:40] = np.random.normal(1, .1, 40)
+class_var[330:] = np.random.normal(1, .1, 30)
+class_var[40:80] = np.random.normal(7, .1, 40)
+class_var[80:120] = np.random.normal(10, .1, 40)
+class_var[230:330] = np.random.normal(10, .1, 100)
+class_var[120:230] = np.random.normal(20, .1, 110)
 
 df_array = np.vstack((input_var1, class_var)).T
-df = pd.DataFrame(df_array, columns=['gfs_wind_spd', 'metar_wind_spd'])
+df = pd.DataFrame(df_array, columns=['gfs_wind_dir', 'metar_wind_spd'])
 
-input_vars = ['gfs_wind_spd']
+input_vars = ['gfs_wind_dir']
 class_var = 'metar_wind_spd'
-
 type_vars = ['cir', 'lin']
+
+df = pd.DataFrame(df_array, columns=input_vars + [class_var])
 
 tree = tree_planter(df, class_var, input_vars, type_vars)
 

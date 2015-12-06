@@ -15,7 +15,7 @@ def tree_pprinter(node):
                                        anode.data.var_desc[anode.split_var]['bounds']))
         else:
             print("({}) Leaf {}, {}".format(len(anode.data.df.index),
-                                     anode.data.var_desc['gfs_wind_spd']['bounds'],
+                                     anode.data.var_desc['gfs_wind_dir']['bounds'],
                                     np.var(anode.data.df[anode.data.class_var].values)))
 
         if anode.left_child is not None:
@@ -47,8 +47,12 @@ def tree_planter(df, class_var, input_vars, var_types):
             raise Exception('Variable types must contain a list of the types for the class variable and input variables as: ["linear"|"circular"]')
 
         var_desc = {}
-        for input_var in input_vars:
-            var_desc[input_var] = {"name": input_var, "type": "cir", "bounds": [[-np.inf, np.inf]]}
+        for i, input_var in enumerate(input_vars):
+            if var_types[i] == "lin":
+                var_desc[input_var] = {"name": input_var, "type": "lin", "bounds": [[-np.inf, np.inf]]}
+            elif var_types[i] == "cir":
+                var_desc[input_var] = {"name": input_var, "type": "cir", "bounds": [[-np.inf, np.inf]]}
+
 
         #data = ClassicData(df, class_var, var_desc)
         data = SubsetData(df, class_var, var_desc)
