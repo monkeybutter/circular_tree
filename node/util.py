@@ -1,13 +1,12 @@
 import numpy as np
 
-def is_in_bounds(value, bound):
-    return bound[0] <= value < bound[1]
 
-def is_in_bounds_cir(value, bound):
+def is_in_bounds(value, bound):
+
     if bound[0] < bound[1]:
         return bound[0] <= value < bound[1]
 
-    else:
+    else: # Covers rest of cases for circular
         return bound[0] <= value <= 360.0 or 0.0 <= value <= bound[1]
 
 
@@ -74,6 +73,7 @@ def bound_generator_cir(data, split_index, bounds):
     #print("-----", data, split_index, bounds)
 
 
+    #Look for better way to detect firt time
     # First
     if [-np.inf, np.inf] in bounds:
         inner_bounds.append((split_value1, split_value2))
@@ -89,12 +89,12 @@ def bound_generator_cir(data, split_index, bounds):
         for bound in bounds:
 
             if outer:
-                if not is_in_bounds_cir(data[split_index[0]], bound) and not is_in_bounds_cir(data[split_index[1]-1], bound):
+                if not is_in_bounds(data[split_index[0]], bound) and not is_in_bounds_cir(data[split_index[1]-1], bound):
                     #print('{} bounds are before first split'.format(bound))
                     outer_bounds.append(bound)
 
                 else:
-                    if not is_in_bounds_cir(data[split_index[1]-1], bound):
+                    if not is_in_bounds(data[split_index[1]-1], bound):
                         #print('{} bounds contain first split but not second split'.format(bound))
                         outer_bounds.append((bound[0], split_value1))
                         inner_bounds.append((split_value1, bound[1]))
@@ -102,23 +102,20 @@ def bound_generator_cir(data, split_index, bounds):
 
                     else:
                         #print('{} bounds contain first & second split'.format(bound))
-
                         # !~~~~ Interesting corner case: Think and Might be implemented in all cases
                         if bound[0] < split_value1:
                             outer_bounds.append((bound[0], split_value1))
-
                         inner_bounds.append((split_value1, split_value2))
-
                         outer_bounds.append((split_value2, bound[1]))
 
             else:
 
-                if not is_in_bounds_cir(data[split_index[1]-1], bound):
+                if not is_in_bounds(data[split_index[1]-1], bound):
                     #print('{} bounds are ***'.format(bound))
                     inner_bounds.append(bound)
 
                 else:
-                    if not is_in_bounds_cir(data[split_index[1]], bound):
+                    if not is_in_bounds(data[split_index[1]], bound):
                         inner_bounds.append(bound)
                     else:
                         inner_bounds.append(bound[0], data[split_index[1]-1])
