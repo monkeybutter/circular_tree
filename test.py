@@ -3,7 +3,7 @@ import time
 import pandas as pd
 
 
-df = pd.read_csv("./datasets/egll.csv")
+df = pd.read_csv("/Users/pablo/Dropbox/Data for Tree/egll.csv")
 cols = list(df.columns)
 class_var = cols[0]
 del cols[0]

@@ -22,7 +22,6 @@ class Node(object):
         if len(self.data.df.index) > self.stop:
             split = self.data.get_best_split()
 
-            print(split['score'], self.variance)
             if split['score'] > self.variance:
 
                 self.split_var = split["var_name"]

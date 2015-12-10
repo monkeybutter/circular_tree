@@ -10,14 +10,9 @@ class Data(object):
 
     def sort_by(self, col_name):
 
-        if self.var_desc[col_name]["type"] == 'lin':
-            self.df = self.df.sort_values(col_name)
-            self.df.index = range(0, len(self.df.index))
+        self.df = self.df.sort_values([col_name, self.class_var])
 
-        elif self.var_desc[col_name]["type"] == 'cir':
-
-            self.df = self.df.sort_values(col_name)
-
+        if self.var_desc[col_name]["type"] == 'cir':
             start = self.var_desc[col_name]["bounds"][0][0]
             end = self.var_desc[col_name]["bounds"][-1][1]
 
@@ -25,7 +20,4 @@ class Data(object):
                 self.df = self.df.query('{} <= {} <= 360.0'.format(start, col_name)).copy().append(
                     self.df.query('0.0 <= {} < {}'.format(col_name, end)).copy())
 
-            self.df.index = range(0, len(self.df.index))
-
-        else:
-            raise Exception("Variable type {} not recognised!".format(self.var_desc[col_name]["type"]))
+        self.df.index = range(0, len(self.df.index))
