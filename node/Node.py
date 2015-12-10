@@ -18,7 +18,7 @@ class Node(object):
         self.right_child = None
         
     def split(self):
-        print(len(self.data.df.index), self.stop)
+        #print(len(self.data.df.index), self.stop)
         if len(self.data.df.index) > self.stop:
             split = self.data.get_best_split()
 
@@ -26,11 +26,11 @@ class Node(object):
             if split['score'] > self.variance:
 
                 self.split_var = split["var_name"]
+                self.data.sort_by(self.split_var)
 
                 if self.data.__class__.__name__ == "ClassicData":
 
-                    split_value = (self.data.df.iloc[split['index']-1][split["var_name"]] +
-                                   self.data.df.iloc[split['index']][split["var_name"]]) / 2.0
+                    split_value = self.data.df.iloc[split['index']][split["var_name"]]
 
                     left_desc = copy.deepcopy(self.data.var_desc)
                     left_desc[split["var_name"]]["bounds"][0][1] = split_value

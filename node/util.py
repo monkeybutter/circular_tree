@@ -54,7 +54,7 @@ def bound_generator_lin(data, split_index, bounds):
                 if not is_in_bounds(data[split_index[1]], bound):
                     inner_bounds.append(bound)
                 else:
-                    inner_bounds.append(bound[0], data[split_index[1]-1])
+                    inner_bounds.append((bound[0], data[split_index[1]-1]))
                     outer_bounds.append((data[split_index[1]-1], bound[1]))
                     #print("D: Output bounds", outer_bounds, inner_bounds)
 
@@ -118,7 +118,7 @@ def bound_generator_cir(data, split_index, bounds):
                     if not is_in_bounds(data[split_index[1]], bound):
                         inner_bounds.append(bound)
                     else:
-                        inner_bounds.append(bound[0], data[split_index[1]-1])
+                        inner_bounds.append((bound[0], data[split_index[1]-1]))
                         outer_bounds.append((data[split_index[1]-1], bound[1]))
                         #print("D: Output bounds", outer_bounds, inner_bounds)
 

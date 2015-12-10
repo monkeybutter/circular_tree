@@ -1,79 +1,51 @@
 import numpy as np
-import pandas as pd
-from random import random, randint
 from data.classic_data import ClassicData
 from data.subset_data import SubsetData
 from node.node import Node
 
 
+##### accuracy evaluator (value accumulator) #########
+def var_calc(anode):
+    return np.var(anode.data.df[anode.data.class_var].values)
+
+
+##### correctness evaluator (True/False) #######
+
 def bound_checker(bounds):
-    
     prev = (None, None)
-    
+
     for bound in bounds:
         if not bound[0] < bound[1]:
             return False
-        if None not in bound and prev[1] >= bound[0]:     
+        if None not in prev and prev[1] >= bound[0]:
             return False
-            
+
         prev = bound
-        
+
     return True
 
 
-def randomizer(i0, i1, prob):
-    if random() < prob and i0 < i1-1:
-        new_i0 = randint(i0, i1-1)
-        new_i1 = randint(new_i0+1, i1)
-        return (new_i0, new_i1)
-    else:
-        return None
+def tree_bound_checker(node):
+    valid = True
 
-def splitter(i, j):
-    if j-i > 2:
-        return randint(i+1, j-1)
-    else:
-        return None
-    
-    
-def create_simple_data(size):
-    input_a = np.sort(np.random.uniform(low=0.0, high=1000.0, size=size))
-    
-    i = 0
-    class_var = np.random.normal(i, .1, size=size)
-    
-    a, b = 0, size-1
-    
-    while True:
-        i += 1
-        bounds = randomizer(a, b, .8)
-        if bounds is None:
-            break
-        class_var[a:b] = np.random.normal(i, .1, size=b-a)
-        a, b = bounds
-    
-    return pd.DataFrame(np.vstack((input_a, class_var)).T, columns=['input1', 'class_var'])
+    def walk_tree(node):
+        nonlocal valid
+
+        for var_bounds in [node.data.var_desc[key]['bounds'] for key in node.data.var_desc.keys()]:
+
+            if not bound_checker(var_bounds):
+                valid = False
+                print("Bound error: ", var_bounds)
 
 
-def create_simple_data2(size, min_size):
+        if node.left_child is not None:
+            walk_tree(node.left_child)
+            walk_tree(node.right_child)
 
-    input_a = np.sort(np.random.uniform(low=0.0, high=1000.0, size=size))
+    walk_tree(node)
 
-    class_var = np.zeros(size)
+    return valid
 
-    def write_chunk(i, j, min_size, level):
-
-        class_var[i:j] = np.random.normal(level, .1, size=j-i)
-        k = splitter(i, j)
-
-        if k-i > min_size:
-            write_chunk(i, k, min_size, level+1)
-        if j-k > min_size:
-            write_chunk(k, j, min_size, level+1)
-
-    write_chunk(0, size-1, min_size, 0)
-
-    return pd.DataFrame(np.vstack((input_a, class_var)).T, columns=['input1', 'class_var'])
 
     
 def tree_pprinter(node):
@@ -85,16 +57,19 @@ def tree_pprinter(node):
         if anode.split_var is not None:
             print("({}) {}, {}".format(len(anode.data.df.index), anode.split_var,
                                        anode.data.var_desc[anode.split_var]['bounds']))
+
         else:
             print("({}) Leaf {}, {}".format(len(anode.data.df.index),
-                                     anode.data.var_desc['gfs_wind_dir']['bounds'],
+                                     anode.data.var_desc['gfs_wind_spd']['bounds'],
                                     np.var(anode.data.df[anode.data.class_var].values)))
+
 
         if anode.left_child is not None:
             print("{} `--".format(fmtr), end="")
             fmtr += "  | "
             pprinter(anode.left_child)
             fmtr = fmtr[:-4]
+
 
             print("{} `--".format(fmtr), end="")
             fmtr += "    "
@@ -104,7 +79,7 @@ def tree_pprinter(node):
     return pprinter(node)
 
 
-def tree_planter(df, class_var, input_vars, var_types, stop=50, variance=.2):
+def tree_planter(df, class_var, input_vars, var_types, tree_type='classic', stop=50, variance=.2):
         if class_var not in df.columns:
             raise Exception('Class variable not in DataFrame')
 
@@ -121,13 +96,18 @@ def tree_planter(df, class_var, input_vars, var_types, stop=50, variance=.2):
         var_desc = {}
         for i, input_var in enumerate(input_vars):
             if var_types[i] == "lin":
-                var_desc[input_var] = {"name": input_var, "type": "lin", "bounds": [[-np.inf, np.inf]]}
+                #var_desc[input_var] = {"name": input_var, "type": "lin", "bounds": [[-np.inf, np.inf]]}
+                var_desc[input_var] = {"type": "lin", "bounds": [[-np.inf, np.inf]]}
             elif var_types[i] == "cir":
-                var_desc[input_var] = {"name": input_var, "type": "cir", "bounds": [[-np.inf, np.inf]]}
+                #var_desc[input_var] = {"name": input_var, "type": "cir", "bounds": [[-np.inf, np.inf]]}
+                var_desc[input_var] = {"type": "cir", "bounds": [[-np.inf, np.inf]]}
 
 
-        data = ClassicData(df, class_var, var_desc)
-        #data = SubsetData(df, class_var, var_desc)
+        if tree_type == 'classic':
+            data = ClassicData(df, class_var, var_desc)
+        elif tree_type == 'subset':
+            data = SubsetData(df, class_var, var_desc)
+
         node = Node(data, stop=stop, variance=variance)
         node.split()
 
