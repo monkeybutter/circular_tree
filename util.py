@@ -9,6 +9,26 @@ def var_calc(anode):
     return np.var(anode.data.df[anode.data.class_var].values)
 
 
+def tree_accuracy_meter(node):
+    acc = 0.0
+    total_len = len(node.data.df.index)
+
+    def walk_tree(node):
+        nonlocal acc
+
+        if node.left_child is None:
+            acc += len(node.data.df.index) * np.var(node.data.df[node.data.class_var].values)
+
+        else:
+            walk_tree(node.left_child)
+            walk_tree(node.right_child)
+
+    walk_tree(node)
+
+    return acc / total_len
+
+
+
 ##### correctness evaluator (True/False) #######
 
 def bound_checker(bounds):

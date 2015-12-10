@@ -1,4 +1,4 @@
-from util import tree_planter, tree_pprinter, tree_bound_checker
+from util import tree_planter, tree_pprinter, tree_bound_checker, tree_accuracy_meter
 import time
 import pandas as pd
 
@@ -14,6 +14,7 @@ time1 = time.time()
 tree_classic = tree_planter(df, class_var, input_vars, type_vars, 'classic', 500, 0.5)
 tree_pprinter(tree_classic)
 print("Check bounds: {}".format(tree_bound_checker(tree_classic)))
+print("Accuracy: {}".format(tree_accuracy_meter(tree_classic)))
 time2 = time.time()
 print("Classic function took {0:.2f} ms".format((time2-time1)*1000.0))
 
