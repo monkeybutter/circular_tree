@@ -5,12 +5,14 @@ class Data(object):
     def __init__(self, df, class_var, var_desc):  # , first=True):
         self.df = df.copy()
         # self.df.dropna(inplace=True)
-        self.class_var = class_var
         self.var_desc = var_desc
+        self.class_var = class_var
+        self.input_vars = list(self.var_desc.keys())
+
 
     def sort_by(self, col_name):
 
-        self.df = self.df.sort_values([col_name, self.class_var])
+        self.df = self.df.sort_values(col_name)
 
         if self.var_desc[col_name]["type"] == 'cir':
             start = self.var_desc[col_name]["bounds"][0][0]
