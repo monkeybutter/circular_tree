@@ -21,6 +21,7 @@ class Node(object):
         #print(len(self.data.df.index), self.stop)
         if len(self.data.df.index) > self.stop:
             split = self.data.get_best_split()
+            #print(split)
 
             if split['score'] > self.variance:
 
@@ -61,21 +62,34 @@ class Node(object):
                                                                      split['index'],
                                                                      self.data.var_desc[split["var_name"]]["bounds"])
 
-                    left_desc = copy.deepcopy(self.data.var_desc)
-                    left_desc[split["var_name"]]["bounds"] = inner_bounds
+                    if split['index'][0] == split['index'][1]:
+                        left_desc = copy.deepcopy(self.data.var_desc)
+                        left_desc[split["var_name"]]["bounds"] = inner_bounds
 
-                    self.left_child = Node(SubsetData(self.data.df.iloc[split['index'][0]:split['index'][1]],
-                                                      self.data.class_var, left_desc), self.stop, self.variance, self.level+1)
+                        self.left_child = Node(SubsetData(self.data.df.iloc[:split['index'][0]],
+                                                          self.data.class_var, left_desc), self.stop, self.variance, self.level+1)
+                        self.left_child.split()
 
-                    self.left_child.split()
+                        right_desc = copy.deepcopy(self.data.var_desc)
+                        right_desc[split["var_name"]]["bounds"] = outer_bounds
+                        self.right_child = Node(SubsetData(self.data.df.iloc[split['index'][0]:],
+                                                           self.data.class_var, right_desc), self.stop, self.variance, self.level+1)
+                        self.right_child.split()
 
-                    right_desc = copy.deepcopy(self.data.var_desc)
-                    right_desc[split["var_name"]]["bounds"] = outer_bounds
-                    self.right_child = Node(SubsetData(pd.concat([self.data.df.iloc[:split['index'][0]],
-                                                                  self.data.df.iloc[split['index'][1]:]]),
-                                                       self.data.class_var, right_desc), self.stop, self.variance, self.level+1)
+                    else:
+                        left_desc = copy.deepcopy(self.data.var_desc)
+                        left_desc[split["var_name"]]["bounds"] = inner_bounds
 
-                    self.right_child.split()
+                        self.left_child = Node(SubsetData(self.data.df.iloc[split['index'][0]:split['index'][1]],
+                                                          self.data.class_var, left_desc), self.stop, self.variance, self.level+1)
+                        self.left_child.split()
+
+                        right_desc = copy.deepcopy(self.data.var_desc)
+                        right_desc[split["var_name"]]["bounds"] = outer_bounds
+                        self.right_child = Node(SubsetData(pd.concat([self.data.df.iloc[:split['index'][0]],
+                                                                      self.data.df.iloc[split['index'][1]:]]),
+                                                           self.data.class_var, right_desc), self.stop, self.variance, self.level+1)
+                        self.right_child.split()
 
                 else:
                     raise Exception("Data class not recognised!")

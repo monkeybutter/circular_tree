@@ -23,8 +23,6 @@ def bound_generator_lin(data, split_index, bounds):
 
     for bound in bounds:
 
-        #nonlocal outer
-
         if outer:
             if not is_in_bounds(data[split_index[0]], bound) and not is_in_bounds(data[split_index[1]-1], bound):
                 #print('{} bounds are before first split'.format(bound))
@@ -40,9 +38,16 @@ def bound_generator_lin(data, split_index, bounds):
 
                 else:
                     #print('{} bounds contain first & second split'.format(bound))
-                    outer_bounds.append((bound[0], split_value1))
-                    inner_bounds.append((split_value1, split_value2))
-                    outer_bounds.append((split_value2, bound[1]))
+
+                    #### !!!! Added the case of same index !!!! #####
+                    if split_index[1] == split_index[1]:
+                        outer_bounds.append((bound[0], split_value1))
+                        inner_bounds.append((split_value1, bound[1]))
+
+                    else:
+                        outer_bounds.append((bound[0], split_value1))
+                        inner_bounds.append((split_value1, split_value2))
+                        outer_bounds.append((split_value2, bound[1]))
 
         else:
 
@@ -102,11 +107,19 @@ def bound_generator_cir(data, split_index, bounds):
 
                     else:
                         #print('{} bounds contain first & second split'.format(bound))
-                        # !~~~~ Interesting corner case: Think and Might be implemented in all cases
-                        if bound[0] < split_value1:
+
+
+                        #### !!!! Added the case of same index !!!! #####
+                        if split_index[1] == split_index[1]:
                             outer_bounds.append((bound[0], split_value1))
-                        inner_bounds.append((split_value1, split_value2))
-                        outer_bounds.append((split_value2, bound[1]))
+                            inner_bounds.append((split_value1, bound[1]))
+
+                        else:
+                             # !~~~~ Interesting corner case: Think and Might be implemented in all cases
+                            if bound[0] < split_value1:
+                                outer_bounds.append((bound[0], split_value1))
+                            inner_bounds.append((split_value1, split_value2))
+                            outer_bounds.append((split_value2, bound[1]))
 
             else:
 

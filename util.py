@@ -75,12 +75,11 @@ def tree_pprinter(node):
         nonlocal fmtr
 
         if anode.split_var is not None:
-            print("({}) {}, {}".format(len(anode.data.df.index), anode.split_var,
+            print("({}) {} {}".format(len(anode.data.df.index), anode.split_var,
                                        anode.data.var_desc[anode.split_var]['bounds']))
 
         else:
-            print("({}) Leaf {}, {}".format(len(anode.data.df.index),
-                                     anode.data.var_desc['gfs_wind_spd']['bounds'],
+            print("({}) Leaf {}".format(len(anode.data.df.index),
                                     np.var(anode.data.df[anode.data.class_var].values)))
 
 
