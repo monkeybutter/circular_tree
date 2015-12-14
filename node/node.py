@@ -28,7 +28,8 @@ class Node(object):
 
                 outer_bounds, inner_bounds = bound_generator(self.data.df[split["var_name"]].values,
                                                                split['index'],
-                                                               self.data.var_desc[split["var_name"]]["bounds"])
+                                                               self.data.var_desc[split["var_name"]]["bounds"],
+                                                             self.data.var_desc[split["var_name"]]['type'] == 'cir')
 
                 left_desc = copy.deepcopy(self.data.var_desc)
                 left_desc[split["var_name"]]["bounds"] = inner_bounds

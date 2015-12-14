@@ -11,7 +11,6 @@ class Data(object):
 
 
     def sort_by(self, col_name):
-
         self.df = self.df.sort_values(col_name)
 
         if self.var_desc[col_name]["type"] == 'cir':

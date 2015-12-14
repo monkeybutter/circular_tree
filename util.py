@@ -114,13 +114,7 @@ def tree_planter(df, class_var, input_vars, var_types, tree_type='classic', stop
 
         var_desc = {}
         for i, input_var in enumerate(input_vars):
-            if var_types[i] == "lin":
-                #var_desc[input_var] = {"name": input_var, "type": "lin", "bounds": [[-np.inf, np.inf]]}
-                var_desc[input_var] = {"type": "lin", "bounds": [[-np.inf, np.inf]]}
-            elif var_types[i] == "cir":
-                #var_desc[input_var] = {"name": input_var, "type": "cir", "bounds": [[-np.inf, np.inf]]}
-                var_desc[input_var] = {"type": "cir", "bounds": [[-np.inf, np.inf]]}
-
+            var_desc[input_var] = {"type": var_types[i], "bounds": [[-np.inf, np.inf]]}
 
         if tree_type == 'classic':
             data = ClassicData(df, class_var, var_desc)
