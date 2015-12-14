@@ -79,8 +79,8 @@ def tree_pprinter(node):
                                        anode.data.var_desc[anode.split_var]['bounds']))
 
         else:
-            print("({}) Leaf {}".format(len(anode.data.df.index),
-                                    np.var(anode.data.df[anode.data.class_var].values)))
+            print("({}) Leaf {} {}".format(len(anode.data.df.index),
+                                    np.var(anode.data.df[anode.data.class_var].values), ["{} {}".format(key, anode.data.var_desc[key]['bounds']) for key in anode.data.var_desc.keys()]))
 
 
         if anode.left_child is not None:

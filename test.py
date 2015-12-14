@@ -11,6 +11,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     df = pd.read_csv(args.path)
+
+    df = df.drop(['gfs_press', 'gfs_rh', 'date', 'time'], 1)
+
     cols = list(df.columns)
     class_var = cols[0]
     del cols[0]
