@@ -51,11 +51,11 @@ def tree_bound_checker(node):
     def walk_tree(node):
         nonlocal valid
 
-        for var_bounds in [node.data.var_desc[key]['bounds'] for key in node.data.var_desc.keys()]:
+        for desc in [node.data.var_desc[key] for key in node.data.var_desc.keys()]:
 
-            if not bound_checker(var_bounds):
+            if not bound_checker(desc['bounds']) and desc['type'] == 'lin':
                 valid = False
-                print("Bound error: ", var_bounds)
+                print("Bound error: ", desc['bounds'])
 
 
         if node.left_child is not None:
@@ -80,7 +80,8 @@ def tree_pprinter(node):
 
         else:
             print("({}) Leaf {} {}".format(len(anode.data.df.index),
-                                    np.var(anode.data.df[anode.data.class_var].values), ["{} {}".format(key, anode.data.var_desc[key]['bounds']) for key in anode.data.var_desc.keys()]))
+                                    np.var(anode.data.df[anode.data.class_var].values),
+                                           ["{} {}".format(key, anode.data.var_desc[key]['bounds']) for key in anode.data.var_desc.keys() if anode.data.var_desc[key]['bounds'] != [[-np.inf, np.inf]]]))
 
 
         if anode.left_child is not None:

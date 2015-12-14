@@ -48,12 +48,12 @@ def bound_generator(data, index, bounds, circular=False):
         #First cicular split
         if bounds == [[-np.inf, np.inf]]:
             return [[data[index[1]], data[index[0]]]], [[data[index[0]], data[index[1]]]]
+
         else:
             for bound in bounds:
                 if bound[0] > bound[1]:
                     outter = []
                     inner = []
-                    print(data[index[0]], data[index[1]], bound)
                     for split in get_outter((data[index[0]], 360.0), [bound[0], 360.0]):
                         outter.append(split)
                     for split in get_outter((0.0, data[index[1]]), [0.0, bound[1]]):
@@ -62,7 +62,6 @@ def bound_generator(data, index, bounds, circular=False):
                         inner.append(split)
                     for split in get_inner((0.0, data[index[1]]), [0.0, bound[1]]):
                         inner.append(split)
-                    print(outter, origin_remover(inner))
                     return outter, origin_remover(inner)
 
                 else:

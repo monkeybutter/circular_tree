@@ -18,6 +18,7 @@ class Node(object):
         self.right_child = None
         
     def split(self):
+
         if len(self.data.df.index) > self.stop:
             split = self.data.get_best_split()
 

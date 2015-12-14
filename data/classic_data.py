@@ -27,7 +27,6 @@ class ClassicData(Data):
     
     def __next__(self):
 
-
         #Objective: Find next split candidate
             # 1.- Can be in same df column
             # 2.- Can be in other column
@@ -52,11 +51,9 @@ class ClassicData(Data):
             else:
                 found = True
 
-
         return (self.iter_var, self.iter_idx[self.iter_i],
                 self.df.iloc[:self.iter_idx[self.iter_i]][self.class_var].values,
                 self.df.iloc[self.iter_idx[self.iter_i]:][self.class_var].values)
-
 
     def get_best_split(self):
         best_split = {'var_name': None, 'score': 0.0, 'index': 0}
