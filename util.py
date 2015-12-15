@@ -1,11 +1,8 @@
 import numpy as np
 from data.data import Data
 from node.node import Node
-
-
-##### accuracy evaluator (value accumulator) #########
-def var_calc(anode):
-    return np.var(anode.data.df[anode.data.class_var].values)
+import random
+import copy
 
 
 def tree_accuracy_meter(node):
@@ -26,9 +23,6 @@ def tree_accuracy_meter(node):
 
     return acc / total_len
 
-
-
-##### correctness evaluator (True/False) #######
 
 def bound_checker(bounds):
     prev = (None, None)
@@ -98,24 +92,9 @@ def tree_pprinter(node):
     return pprinter(node)
 
 
-def tree_planter(df, class_var, input_vars, var_types, var_methods, stop=50, variance=.2):
+def tree_planter(df, class_var, var_desc, stop=50, variance=.2):
         if class_var not in df.columns:
             raise Exception('Class variable not in DataFrame')
-
-        for input_var in input_vars:
-            if input_var not in df.columns:
-                raise Exception('Input variable: "{}" not in DataFrame'.format(input_var))
-
-        if class_var in input_vars:
-            raise Exception('Class variable cannot be an input variable at the same time')
-
-        if len(input_vars) != len(var_types):
-            raise Exception('Variable types must contain a list of the types for the class variable and input variables as: ["linear"|"circular"]')
-
-        var_desc = {}
-
-        for i, input_var in enumerate(input_vars):
-            var_desc[input_var] = {"type": var_types[i], "method": var_methods[i], "bounds": [[-np.inf, np.inf]]}
 
         data = Data(df, class_var, var_desc)
 
@@ -123,3 +102,69 @@ def tree_planter(df, class_var, input_vars, var_types, var_methods, stop=50, var
         node.split()
 
         return node
+
+
+# Input tree and row
+# Output collection of rows
+def tree_eval(node, row):
+    acc = 0.0
+    total_len = len(node.data.df.index)
+
+    def walk_tree(node):
+        nonlocal acc
+
+        if node.left_child is None:
+            acc += len(node.data.df.index) * np.var(node.data.df[node.data.class_var].values)
+
+        else:
+            walk_tree(node.left_child)
+            walk_tree(node.right_child)
+
+    walk_tree(node)
+
+    return acc / total_len
+
+
+def cxval_k_folds_split(df, k_folds):
+
+    dataframes = []
+    group_size = int(round(df.shape[0]*(1.0/k_folds)))
+
+    for i in range(k_folds-1):
+        rows = random.sample(df.index, group_size)
+        dataframes.append(df.ix[rows])
+        df = df.drop(rows)
+
+    dataframes.append(df)
+
+    return dataframes
+
+
+def cxval_select_fold(i_fold, df_folds):
+    df_folds_copy = copy.deepcopy(df_folds)
+
+    if 0 <= i_fold < len(df_folds):
+
+        test_df = df_folds_copy[i_fold]
+        del df_folds_copy[i_fold]
+        train_df = pd.concat(df_folds_copy)
+
+        return train_df, test_df
+
+    else:
+        raise Exception('Group not in range!')
+
+
+def cxval_test(df, class_var, var_desc, bin_size, k_folds):
+
+    df_folds = cxval_k_folds_split(df, k_folds)
+    results = []
+
+    for i in range(k_folds):
+        print("Cross Validation: {}".format(i+1))
+        train_df, test_df = cxval_select_fold(i, df_folds)
+        tree = tree_planter(train_df, class_var, var_desc)
+
+        print("Cross Correlation: {}".format(evaluate_dataset_cc(tree, test_df)))
+        print("Root Mean Square Error: {}".format(evaluate_dataset_rmse(tree, test_df)))
+        print("Mean Absolute Error: {}".format(evaluate_dataset_mae(tree, test_df)))
