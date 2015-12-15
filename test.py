@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
     df = pd.read_csv(args.path)
 
-    #df = df.drop(['gfs_press', 'gfs_rh', 'date', 'time'], 1) 
+    #df = df.drop(['gfs_press', 'gfs_rh', 'date', 'time'], 1)
 
     cols = list(df.columns)
 

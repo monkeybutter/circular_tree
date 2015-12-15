@@ -21,27 +21,6 @@ class Data(object):
         self.iter_var = None
         self.iter_idx = [None]
 
-
-        # Data can be either classic or subset and the iteration changes
-
-        """
-        We need to find a way of iterating by variable:
-            Cases:
-                1.- Classic: Every variable is classic and iterates as classic
-                2.- Subset: Every variable is subset and iterates as subset
-                3.- Subset + circular (Lund): The only affected functions for this case are the bound_generator and the data.sort_by()
-                                              Iterators and Node split are not affected
-                4.- Classic + circular (Mine): Iterator in this case must change for the input variables defined as circular
-                                               but only for the first time
-
-
-            Conclusions:
-                1.- Both ways of iteration must be available in the same class -> Done
-                2.- iterator initialization must define the way each variable is going to be iterated each time -> Done
-                                        Differenciation is in the initialization now self.iter_i = [0, 0] or [None, 0]
-
-        """
-
     def sort_by(self, col_name):
         self.df = self.df.sort_values(col_name)
 
