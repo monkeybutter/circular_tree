@@ -20,9 +20,8 @@ if __name__ == "__main__":
     input_vars = cols
     type_vars = ['lin'] + ['lin' for var in input_vars]
 
-
     time1 = time.time()
-    tree_classic = tree_planter(df, class_var, input_vars, type_vars, 'classic', 250, 0.25)
+    tree_classic = tree_planter(df, class_var, input_vars, type_vars, 250, 0.25)
     tree_pprinter(tree_classic)
     print("Check bounds: {}".format(tree_bound_checker(tree_classic)))
     print("Accuracy: {}".format(tree_accuracy_meter(tree_classic)))
@@ -31,7 +30,16 @@ if __name__ == "__main__":
 
     type_vars[1] = 'cir'
     time1 = time.time()
-    tree_subset = tree_planter(df, class_var, input_vars, type_vars, 'subset', 250, 0.25)
+    tree_subset = tree_planter(df, class_var, input_vars, type_vars, 250, 0.25)
+    tree_pprinter(tree_subset)
+    print("Check bounds: {}".format(tree_bound_checker(tree_subset)))
+    print("Accuracy: {}".format(tree_accuracy_meter(tree_subset)))
+    time2 = time.time()
+    print("Subset function took {0:.2f} s".format((time2-time1)))
+
+    type_vars = ['lin'] + ['cir' for var in input_vars]
+    time1 = time.time()
+    tree_subset = tree_planter(df, class_var, input_vars, type_vars, 250, 0.25)
     tree_pprinter(tree_subset)
     print("Check bounds: {}".format(tree_bound_checker(tree_subset)))
     print("Accuracy: {}".format(tree_accuracy_meter(tree_subset)))
