@@ -20,7 +20,7 @@ if __name__ == "__main__":
     input_vars = cols
     type_vars = ['lin'] + ['lin' for var in input_vars]
 
-
+    """
     time1 = time.time()
     tree_classic = tree_planter(df, class_var, input_vars, type_vars, 'classic', 250, 0.25)
     tree_pprinter(tree_classic)
@@ -28,6 +28,7 @@ if __name__ == "__main__":
     print("Accuracy: {}".format(tree_accuracy_meter(tree_classic)))
     time2 = time.time()
     print("Classic function took {0:.2f} s".format((time2-time1)))
+    """
 
     type_vars[1] = 'cir'
     time1 = time.time()

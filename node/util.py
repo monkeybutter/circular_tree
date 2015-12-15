@@ -74,8 +74,8 @@ def bound_generator(data, index, bounds, circular=False):
                     return outter, inner
 
     else:
-        if not isinstance(index, list):
-            return get_outter((-np.inf, data[index]), bounds[0]), get_inner((-np.inf, data[index]), bounds[0])
+        if index[0] is None:
+            return get_outter((-np.inf, data[index[1]]), bounds[0]), get_inner((-np.inf, data[index[1]]), bounds[0])
 
         else:
             outter = []

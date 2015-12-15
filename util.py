@@ -1,6 +1,5 @@
 import numpy as np
-from data.classic_data import ClassicData
-from data.subset_data import SubsetData
+from data.data import Data
 from node.node import Node
 
 
@@ -114,13 +113,20 @@ def tree_planter(df, class_var, input_vars, var_types, tree_type='classic', stop
             raise Exception('Variable types must contain a list of the types for the class variable and input variables as: ["linear"|"circular"]')
 
         var_desc = {}
-        for i, input_var in enumerate(input_vars):
-            var_desc[input_var] = {"type": var_types[i], "bounds": [[-np.inf, np.inf]]}
 
-        if tree_type == 'classic':
-            data = ClassicData(df, class_var, var_desc)
-        elif tree_type == 'subset':
-            data = SubsetData(df, class_var, var_desc)
+        for i, input_var in enumerate(input_vars):
+            var_desc[input_var] = {"type": var_types[i], "method": 'subset', "bounds": [[-np.inf, np.inf]]}
+
+        """
+        for i, input_var in enumerate(input_vars):
+            if var_types[i] == 'lin':
+                var_desc[input_var] = {"type": var_types[i], "method": 'classic', "bounds": [[-np.inf, np.inf]]}
+            elif var_types[i] == 'cir':
+                print(input_var, var_types[i])
+                var_desc[input_var] = {"type": var_types[i], "method": 'subset', "bounds": [[-np.inf, np.inf]]}
+        """
+
+        data = Data(df, class_var, var_desc)
 
         node = Node(data, stop=stop, variance=variance)
         node.split()
