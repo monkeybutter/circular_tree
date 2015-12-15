@@ -1,5 +1,6 @@
 import numpy as np
 from data.util import get_score
+import sys
 
 class Data(object):
     __class_description__ = """Class modelling Data a Binary Tree based on Pandas DataFrame"""
@@ -54,9 +55,10 @@ class Data(object):
 
         self.df.index = range(0, len(self.df.index))
 
-
     def __iter__(self):
+
         self.iter_var = 0
+
         if self.var_desc[self.input_vars[self.iter_var]]["method"] == "classic":
             self.iter_i = [None, 0]
         elif self.var_desc[self.input_vars[self.iter_var]]["method"] == "subset":
@@ -70,72 +72,27 @@ class Data(object):
 
         return self
 
-
     def __next__(self):
-
         found = False
 
         while not found:
-
             self.iter_i[1] += 1
 
             if self.iter_i[1] == len(self.iter_idx):
                 if self.iter_i[0] is None or self.iter_i[0] == len(self.iter_idx)-1:
-                    if self.iter_var == len(self.input_vars)-1:
-                        raise StopIteration
-                    else:
-                        if self.var_desc[self.input_vars[self.iter_var]]["method"] == "classic":
-                            self.iter_i = [None, 0]
-                        elif self.var_desc[self.input_vars[self.iter_var]]["method"] == "subset":
-                            self.iter_i = [0, 0]
-                        else:
-                            Exception()
+                    if self.iter_var < len(self.input_vars):
                         self.iter_var += 1
-                        self.sort_by(self.input_vars[self.iter_var])
-                        self.iter_idx = np.where(self.df[self.input_vars[self.iter_var]].values[:-1] !=
-                                                 self.df[self.input_vars[self.iter_var]].values[1:])[0] + 1
-                else:
-                    self.iter_i[0] += 1
-                    self.iter_i[1] = self.iter_i[0]
-                    self.iter_idx = np.where(self.df[self.input_vars[self.iter_var]].values[:-1] !=
-                                             self.df[self.input_vars[self.iter_var]].values[1:])[0] + 1
-
-            else:
-                found = True
-
-        if self.iter_i[0] is None:
-            return (self.iter_var, self.iter_idx[self.iter_i[1]],
-                    self.df.iloc[:self.iter_idx[self.iter_i[1]]][self.class_var].values,
-                    self.df.iloc[self.iter_idx[self.iter_i[1]]:][self.class_var].values)
-        else:
-            return (self.iter_var, [self.iter_idx[self.iter_i[0]], self.iter_idx[self.iter_i[1]]],
-                    self.df.iloc[self.iter_idx[self.iter_i[0]]:self.iter_idx[self.iter_i[1]]][self.class_var].values,
-                    np.concatenate((self.df.iloc[:self.iter_idx[self.iter_i[0]]][self.class_var].values,
-                                    self.df.iloc[self.iter_idx[self.iter_i[1]]:][self.class_var].values)))
-
-
-    def __next__(self):
-
-        found = False
-
-        while not found:
-
-            self.iter_i[1] += 1
-
-            if self.iter_i[1] == len(self.iter_idx):
-                if self.iter_i[0] is None or self.iter_i[0] == len(self.iter_idx)-1:
-                    if self.iter_var == len(self.input_vars)-1:
-                        raise StopIteration
-                    else:
-                        if self.iter_i[0] is None:
-                            self.iter_i = [None, 0]
+                        if self.iter_var == len(self.input_vars):
+                            raise StopIteration
                         else:
-                            self.iter_i = [0, 0]
-                        self.iter_var += 1
-                        self.sort_by(self.input_vars[self.iter_var])
-                        self.iter_idx = np.where(self.df[self.input_vars[self.iter_var]].values[:-1] !=
-                                                 self.df[self.input_vars[self.iter_var]].values[1:])[0] + 1
+                            if self.var_desc[self.input_vars[self.iter_var]]["method"] == "classic":
+                                self.iter_i = [None, 0]
+                            elif self.var_desc[self.input_vars[self.iter_var]]["method"] == "subset":
+                                self.iter_i = [0, 0]
 
+                            self.sort_by(self.input_vars[self.iter_var])
+                            self.iter_idx = np.where(self.df[self.input_vars[self.iter_var]].values[:-1] !=
+                                                     self.df[self.input_vars[self.iter_var]].values[1:])[0] + 1
                 else:
                     self.iter_i[0] += 1
                     self.iter_i[1] = self.iter_i[0]

@@ -98,7 +98,7 @@ def tree_pprinter(node):
     return pprinter(node)
 
 
-def tree_planter(df, class_var, input_vars, var_types, tree_type='classic', stop=50, variance=.2):
+def tree_planter(df, class_var, input_vars, var_types, stop=50, variance=.2):
         if class_var not in df.columns:
             raise Exception('Class variable not in DataFrame')
 
@@ -115,16 +115,10 @@ def tree_planter(df, class_var, input_vars, var_types, tree_type='classic', stop
         var_desc = {}
 
         for i, input_var in enumerate(input_vars):
-            var_desc[input_var] = {"type": var_types[i], "method": 'subset', "bounds": [[-np.inf, np.inf]]}
-
-        """
-        for i, input_var in enumerate(input_vars):
             if var_types[i] == 'lin':
                 var_desc[input_var] = {"type": var_types[i], "method": 'classic', "bounds": [[-np.inf, np.inf]]}
             elif var_types[i] == 'cir':
-                print(input_var, var_types[i])
                 var_desc[input_var] = {"type": var_types[i], "method": 'subset', "bounds": [[-np.inf, np.inf]]}
-        """
 
         data = Data(df, class_var, var_desc)
 
