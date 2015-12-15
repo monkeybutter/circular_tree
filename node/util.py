@@ -42,12 +42,16 @@ def get_inner(values, bound):
         return []
 
 
-def bound_generator(data, index, bounds, circular=False):
+def bound_generator(data, index, bounds, circular):
 
     if circular:
         #First cicular split
         if bounds == [[-np.inf, np.inf]]:
             return [[data[index[1]], data[index[0]]]], [[data[index[0]], data[index[1]]]]
+
+        #Subsequent classical cicular splits
+        elif index[0] == None:
+            return [[bounds[0][0], data[index[1]]]], [[data[index[1]], bounds[0][1]]]
 
         else:
             for bound in bounds:

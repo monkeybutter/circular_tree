@@ -60,11 +60,14 @@ class Data(object):
         self.iter_var = 0
 
         if self.var_desc[self.input_vars[self.iter_var]]["method"] == "classic":
-            self.iter_i = [None, 0]
+            if self.var_desc[self.input_vars[self.iter_var]]["type"] == "cir" and self.var_desc[self.input_vars[self.iter_var]]["bounds"] == [[-np.inf, np.inf]]:
+                self.iter_i = [0, 0]
+            else:
+                self.iter_i = [None, 0]
         elif self.var_desc[self.input_vars[self.iter_var]]["method"] == "subset":
             self.iter_i = [0, 0]
         else:
-            Exception()
+            raise Exception("Method not recognised.")
 
         self.sort_by(self.input_vars[self.iter_var])
         self.iter_idx = np.where(self.df[self.input_vars[self.iter_var]].values[:-1] !=
@@ -86,7 +89,10 @@ class Data(object):
                             raise StopIteration
                         else:
                             if self.var_desc[self.input_vars[self.iter_var]]["method"] == "classic":
-                                self.iter_i = [None, 0]
+                                if self.var_desc[self.input_vars[self.iter_var]]["type"] == "cir" and self.var_desc[self.input_vars[self.iter_var]]["bounds"] == [[-np.inf, np.inf]]:
+                                    self.iter_i = [0, 0]
+                                else:
+                                    self.iter_i = [None, 0]
                             elif self.var_desc[self.input_vars[self.iter_var]]["method"] == "subset":
                                 self.iter_i = [0, 0]
 
