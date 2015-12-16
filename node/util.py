@@ -51,7 +51,7 @@ def bound_generator(data, index, bounds, circular):
 
         #Subsequent classical cicular splits
         elif index[0] == None:
-            return [[bounds[0][0], data[index[1]]]], [[data[index[1]], bounds[0][1]]]
+            return [[data[index[1]], bounds[0][1]]], [[bounds[0][0], data[index[1]]]]
 
         else:
             for bound in bounds:

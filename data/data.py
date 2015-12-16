@@ -74,7 +74,6 @@ class Data(object):
                                     self.iter_i = [None, 0]
                             elif self.var_desc[self.input_vars[self.iter_var]]["method"] == "subset":
                                 self.iter_i = [0, 0]
-
                             self.sort_by(self.input_vars[self.iter_var])
                             self.iter_idx = np.where(self.df[self.input_vars[self.iter_var]].values[:-1] !=
                                                      self.df[self.input_vars[self.iter_var]].values[1:])[0] + 1
@@ -104,5 +103,4 @@ class Data(object):
             score = get_score(left, right)
             if score > best_split['score']:
                 best_split.update({'var_name': self.input_vars[var_i], 'score': score, 'index': i[:]})
-
         return best_split
