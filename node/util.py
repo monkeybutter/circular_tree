@@ -54,10 +54,11 @@ def bound_generator(data, index, bounds, circular):
             return [[data[index[1]], bounds[0][1]]], [[bounds[0][0], data[index[1]]]]
 
         else:
+            outter = []
+            inner = []
             for bound in bounds:
                 if bound[0] > bound[1]:
-                    outter = []
-                    inner = []
+
                     for split in get_outter((data[index[0]], 360.0), [bound[0], 360.0]):
                         outter.append(split)
                     for split in get_outter((0.0, data[index[1]]), [0.0, bound[1]]):
@@ -66,16 +67,15 @@ def bound_generator(data, index, bounds, circular):
                         inner.append(split)
                     for split in get_inner((0.0, data[index[1]]), [0.0, bound[1]]):
                         inner.append(split)
-                    return outter, origin_remover(inner)
 
                 else:
-                    outter = []
-                    inner = []
+
                     for split in get_outter((data[index[0]], data[index[1]]), bound):
                         outter.append(split)
                     for split in get_inner((data[index[0]], data[index[1]]), bound):
                         inner.append(split)
-                    return outter, inner
+
+            return origin_remover(outter), origin_remover(inner)
 
     else:
         if index[0] is None:

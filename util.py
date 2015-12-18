@@ -158,9 +158,9 @@ def tree_rmse_calc(node, df):
     return math.sqrt(acc / total_len)
 
 
-def cxval_k_folds_split(df, k_folds):
+def cxval_k_folds_split(df, k_folds, seed):
 
-    random.seed(1)
+    random.seed(seed)
 
     dataframes = []
     group_size = int(round(df.shape[0]*(1.0/k_folds)))
@@ -188,14 +188,14 @@ def cxval_select_fold(i_fold, df_folds):
         raise Exception('Group not in range!')
 
 
-def cxval_test(df, class_var, var_desc, k_folds):
-    df_folds = cxval_k_folds_split(df, k_folds)
+def cxval_test(df, class_var, var_desc, leaf_size, variance=0.2, k_folds=5, seed=1):
+    df_folds = cxval_k_folds_split(df, k_folds, seed)
     rmse_results = []
     mae_results = []
 
     for i in range(k_folds):
         train_df, test_df = cxval_select_fold(i, df_folds)
-        tree = tree_planter(train_df, class_var, var_desc, 250, 0.25)
+        tree = tree_planter(train_df, class_var, var_desc, leaf_size, variance)
 
         mae_results.append(tree_mae_calc(tree, test_df))
         rmse_results.append(tree_rmse_calc(tree, test_df))
