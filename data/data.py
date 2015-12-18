@@ -104,7 +104,9 @@ class Data(object):
             if score > best_split['score']:
                 best_split.update({'var_name': self.input_vars[var_i], 'score': score, 'index': i[:]})
 
+        """ Tracking nodes
         if len(self.df.index) == 2925:
             print(best_split)
+        """
 
         return best_split

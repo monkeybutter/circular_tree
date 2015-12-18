@@ -188,7 +188,7 @@ def cxval_select_fold(i_fold, df_folds):
         raise Exception('Group not in range!')
 
 
-def cxval_test(df, class_var, var_desc, leaf_size, variance=0.2, k_folds=5, seed=1):
+def cxval_test(df, class_var, var_desc, leaf_size, variance=0.25, k_folds=5, seed=1):
     df_folds = cxval_k_folds_split(df, k_folds, seed)
     rmse_results = []
     mae_results = []

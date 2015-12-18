@@ -23,9 +23,6 @@ class Node(object):
 
             if split['score'] > self.variance:
 
-                if len(self.data.df.index) == 2925:
-                    print("And now we are here!")
-
                 self.split_var = split["var_name"]
                 self.data.sort_by(self.split_var)
 
@@ -33,9 +30,6 @@ class Node(object):
                                                              split['index'],
                                                              self.data.var_desc[split["var_name"]]["bounds"],
                                                              self.data.var_desc[split["var_name"]]['type'] == 'cir')
-
-                if len(self.data.df.index) == 2925:
-                    print(outer_bounds, inner_bounds)
 
                 left_desc = copy.deepcopy(self.data.var_desc)
                 left_desc[split["var_name"]]["bounds"] = inner_bounds
@@ -46,8 +40,6 @@ class Node(object):
                 #if self.data.var_desc[split["var_name"]]["method"] == "classic":
                 # Because the circular classic first split has to be treated as subset
                 if split['index'][0] is None:
-                    if len(self.data.df.index) == 2925:
-                        print("I'm a classic")
                     self.left_child = Node(Data(self.data.df.iloc[:split['index'][1]],
                                                 self.data.class_var, left_desc),
                                            self.stop, self.variance, self.level+1)
@@ -57,8 +49,6 @@ class Node(object):
 
                 #elif self.data.var_desc[split["var_name"]]["method"] == "subset":
                 else:
-                    if len(self.data.df.index) == 2925:
-                        print("I'm the guy to beat")
                     self.left_child = Node(Data(self.data.df.iloc[split['index'][0]:split['index'][1]],
                                                 self.data.class_var, left_desc),
                                            self.stop, self.variance, self.level+1)
