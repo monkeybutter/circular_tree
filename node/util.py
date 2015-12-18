@@ -1,5 +1,6 @@
 import numpy as np
 
+"""
 def origin_remover(bounds):
     new_bounds = []
     init = None
@@ -12,6 +13,25 @@ def origin_remover(bounds):
             init = None
         else:
             new_bounds.append(bound)
+
+    return new_bounds
+"""
+
+def bound_bonder(bounds):
+    new_bounds = []
+    prev = None
+    for bound in bounds:
+        if prev:
+            if prev[1] == bound[0] or (prev[1] == 360.0 and bound[0] == 0.0):
+                prev = [prev[0], bound[1]]
+            else:
+                new_bounds.append(prev)
+                prev = bound
+        else:
+            prev = bound
+
+    if prev:
+        new_bounds.append(prev)
 
     return new_bounds
 
@@ -44,13 +64,17 @@ def get_inner(values, bound):
 
 def bound_generator(data, index, bounds, circular):
 
+    #print("Input <-", bounds)
+
     if circular:
         #First cicular split
         if bounds == [[-np.inf, np.inf]]:
+            #print("A Output <-", [[data[index[1]], data[index[0]]]], [[data[index[0]], data[index[1]]]])
             return [[data[index[1]], data[index[0]]]], [[data[index[0]], data[index[1]]]]
 
         #Subsequent classical cicular splits
         elif index[0] == None:
+            #print("B Output <-", [[data[index[1]], bounds[0][1]]], [[bounds[0][0], data[index[1]]]])
             return [[data[index[1]], bounds[0][1]]], [[bounds[0][0], data[index[1]]]]
 
         else:
@@ -58,6 +82,7 @@ def bound_generator(data, index, bounds, circular):
             inner = []
             for bound in bounds:
                 if bound[0] > bound[1]:
+                    #print("a")
 
                     for split in get_outter((data[index[0]], 360.0), [bound[0], 360.0]):
                         outter.append(split)
@@ -69,16 +94,19 @@ def bound_generator(data, index, bounds, circular):
                         inner.append(split)
 
                 else:
-
+                    #print("b")
                     for split in get_outter((data[index[0]], data[index[1]]), bound):
                         outter.append(split)
                     for split in get_inner((data[index[0]], data[index[1]]), bound):
                         inner.append(split)
 
-            return origin_remover(outter), origin_remover(inner)
+            #print("C Output <-", outter, inner)
+            #print("C Output <-", bound_bonder(outter), bound_bonder(inner))
+            return bound_bonder(outter), bound_bonder(inner)
 
     else:
         if index[0] is None:
+            #print("D Output <-", get_outter((-np.inf, data[index[1]]), bounds[0]), get_inner((-np.inf, data[index[1]]), bounds[0]))
             return get_outter((-np.inf, data[index[1]]), bounds[0]), get_inner((-np.inf, data[index[1]]), bounds[0])
 
         else:
@@ -90,6 +118,7 @@ def bound_generator(data, index, bounds, circular):
                 for split in get_inner((data[index[0]], data[index[1]]), bound):
                     inner.append(split)
 
+            #print("E Output <-", outter, inner)
             return outter, inner
 
 

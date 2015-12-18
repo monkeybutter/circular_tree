@@ -37,13 +37,15 @@ if __name__ == "__main__":
     c_rmse = []
     c_time = []
 
-    for i in range(10):
+    for i in range(25):
+        print(i)
         var_desc["gfs_wind_dir"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
         time1 = time.time()
         mae, rmse = cxval_test(df, class_var, var_desc, 100, seed=i)
         a_mae.append(mae)
         a_rmse.append(rmse)
         a_time.append(time.time()-time1)
+        #print(i)
 
         var_desc["gfs_wind_dir"] = {"type": "cir", "method": "classic", "bounds": [[-np.inf, np.inf]]}
         time1 = time.time()
@@ -52,6 +54,7 @@ if __name__ == "__main__":
         b_rmse.append(rmse)
         b_time.append(time.time()-time1)
 
+        #print(i)
         var_desc["gfs_wind_dir"] = {"type": "cir", "method": "subset", "bounds": [[-np.inf, np.inf]]}
         time1 = time.time()
         mae, rmse = cxval_test(df, class_var, var_desc, 100, seed=i)
@@ -59,6 +62,6 @@ if __name__ == "__main__":
         c_rmse.append(rmse)
         c_time.append(time.time()-time1)
 
-    print("Classic Accuracy: {}").format(sum(a_mae)/len(a_mae))
-    print("Our Accuracy: {}").format(sum(b_mae)/len(b_mae))
-    print("Lunds Accuracy: {}").format(sum(c_mae)/len(c_mae))
+    print("Classic Accuracy: {}".format(sum(a_mae)/len(a_mae)))
+    print("Our Accuracy: {}".format(sum(b_mae)/len(b_mae)))
+    print("Lunds Accuracy: {}".format(sum(c_mae)/len(c_mae)))

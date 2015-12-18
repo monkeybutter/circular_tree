@@ -132,6 +132,9 @@ def tree_eval(node, row):
             elif is_in_bounds(node.right_child.data.var_desc[node.split_var]["bounds"], row[node.split_var]):
                 eval(node.right_child, row)
             else:
+                print(node.data.var_desc[node.split_var]["bounds"], row[node.split_var])
+                print(node.left_child.data.var_desc[node.split_var]["bounds"], row[node.split_var])
+                print(node.right_child.data.var_desc[node.split_var]["bounds"], row[node.split_var])
                 sys.exit("tree_eval() problem with bounds ????")
 
     eval(node, row)

@@ -60,8 +60,10 @@ class Data(object):
         while not found:
             self.iter_i[1] += 1
 
-            if self.iter_i[1] == len(self.iter_idx):
-                if self.iter_i[0] is None or self.iter_i[0] == len(self.iter_idx)-1:
+            # == modified to >=
+            # if sequence is all constant self.iter_i[1] == 1 doesn't match len(self.iter_idx) == 0
+            if self.iter_i[1] >= len(self.iter_idx):
+                if self.iter_i[0] is None or self.iter_i[0] >= len(self.iter_idx)-1:
                     if self.iter_var < len(self.input_vars):
                         self.iter_var += 1
                         if self.iter_var == len(self.input_vars):
