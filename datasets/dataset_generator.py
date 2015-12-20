@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from random import random, randint
+from datetime import datetime
 
 def randomizer(i0, i1, prob):
     if random() < prob and i0 < i1-1:
@@ -56,3 +57,26 @@ def create_simple_data2(size, min_size):
 
 
     return pd.DataFrame(np.vstack((input_a, class_var)).T, columns=['input1', 'class_var'])
+
+
+def transform(name):
+
+    df = pd.read_csv("./{}.csv".format(name))
+
+    df['time'] = df['time'].map(lambda x: datetime.strptime(x, '%H:%M'))
+    df['time'] = df['time'].map(lambda x: ((x.minute / 60.0 + x.hour) / 24.0) * 360)
+
+    df['date'] = df['date'].map(lambda x: datetime.strptime(x, '%Y-%m-%d'))
+    df['date'] = df['date'].map(lambda x: (x.timetuple().tm_yday / 365.0)*360.0)
+    df['date'] = df['date'].map(lambda x: int(5 * round(float(x)/5)))
+
+    df['gfs_press'] = df['gfs_press'].map(lambda x: int(round(float(x))))
+    df['gfs_rh'] = df['gfs_rh'].map(lambda x: int(round(float(x))))
+    df['gfs_temp'] = df['gfs_temp'].map(lambda x: int(round(float(x))))
+    df['gfs_wind_dir'] = df['gfs_wind_dir'].map(lambda x: int(5 * round(float(x)/5)))
+    df['gfs_wind_spd'] = df['gfs_wind_spd'].map(lambda x: int(.5 * round(float(x)/.5)))
+
+    df = df.drop(['metar_press', 'metar_rh', 'metar_temp', 'metar_wind_dir'], 1)
+
+    df.index = range(0, len(df.index))
+    df.to_csv("./{}_clean.csv".format(name))

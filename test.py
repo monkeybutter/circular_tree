@@ -5,63 +5,70 @@ import numpy as np
 import argparse
 
 if __name__ == "__main__":
-
+    """
     parser = argparse.ArgumentParser(description="Tree parser")
     parser.add_argument(dest="path", type=str, help="path to csv")
 
     args = parser.parse_args()
-    df = pd.read_csv(args.path)
+    """
 
-    df = df.drop(["time", "date"], axis=1)
+    names = ["eddt", "egll", "yssy", "zbaa", "lebl", "lfpg", "limc"]
 
-    var_desc = {}
-    var_desc["gfs_press"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
-    var_desc["gfs_rh"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
-    var_desc["gfs_temp"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
-    var_desc["gfs_wind_dir"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
-    var_desc["gfs_wind_spd"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
-    #var_desc["time"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
-    #var_desc["date"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
+    for name in names:
+        print(name)
+        df = pd.read_csv("./datasets/{}_clean.csv".format(name))
+        df = df.drop(["time", "date"], axis=1)
 
-    class_var = "metar_wind_spd"
-
-    a_mae = []
-    a_rmse = []
-    a_time = []
-
-    b_mae = []
-    b_rmse = []
-    b_time = []
-
-    c_mae = []
-    c_rmse = []
-    c_time = []
-
-    for i in range(25):
-        print(i)
+        var_desc = {}
+        var_desc["gfs_press"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
+        var_desc["gfs_rh"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
+        var_desc["gfs_temp"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
         var_desc["gfs_wind_dir"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
-        time1 = time.time()
-        mae, rmse = cxval_test(df, class_var, var_desc, 100, seed=i)
-        a_mae.append(mae)
-        a_rmse.append(rmse)
-        a_time.append(time.time()-time1)
-        #print(i)
+        var_desc["gfs_wind_spd"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
+        #var_desc["time"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
+        #var_desc["date"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
 
-        var_desc["gfs_wind_dir"] = {"type": "cir", "method": "classic", "bounds": [[-np.inf, np.inf]]}
-        time1 = time.time()
-        mae, rmse = cxval_test(df, class_var, var_desc, 100, seed=i)
-        b_mae.append(mae)
-        b_rmse.append(rmse)
-        b_time.append(time.time()-time1)
+        class_var = "metar_wind_spd"
 
-        #print(i)
-        var_desc["gfs_wind_dir"] = {"type": "cir", "method": "subset", "bounds": [[-np.inf, np.inf]]}
-        time1 = time.time()
-        mae, rmse = cxval_test(df, class_var, var_desc, 100, seed=i)
-        c_mae.append(mae)
-        c_rmse.append(rmse)
-        c_time.append(time.time()-time1)
+        a_mae = []
+        a_rmse = []
+        a_time = []
 
-    print("Classic Accuracy: {}".format(sum(a_mae)/len(a_mae)))
-    print("Our Accuracy: {}".format(sum(b_mae)/len(b_mae)))
-    print("Lunds Accuracy: {}".format(sum(c_mae)/len(c_mae)))
+        b_mae = []
+        b_rmse = []
+        b_time = []
+
+        c_mae = []
+        c_rmse = []
+        c_time = []
+
+        for i in range(5):
+            var_desc["gfs_wind_dir"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
+            time1 = time.time()
+            mae, rmse = cxval_test(df, class_var, var_desc, 100, seed=i)
+            a_mae.append(mae)
+            a_rmse.append(rmse)
+            a_time.append(time.time()-time1)
+            #print(i)
+
+            var_desc["gfs_wind_dir"] = {"type": "cir", "method": "classic", "bounds": [[-np.inf, np.inf]]}
+            time1 = time.time()
+            mae, rmse = cxval_test(df, class_var, var_desc, 100, seed=i)
+            b_mae.append(mae)
+            b_rmse.append(rmse)
+            b_time.append(time.time()-time1)
+
+            #print(i)
+            var_desc["gfs_wind_dir"] = {"type": "cir", "method": "subset", "bounds": [[-np.inf, np.inf]]}
+            time1 = time.time()
+            mae, rmse = cxval_test(df, class_var, var_desc, 100, seed=i)
+            c_mae.append(mae)
+            c_rmse.append(rmse)
+            c_time.append(time.time()-time1)
+
+        print("Classic Accuracy: MAE: {}, RMSE: {}, Time: {}".format(sum(a_mae)/len(a_mae), sum(a_rmse)/len(a_rmse),
+                                                                     sum(a_time)/len(a_time)))
+        print("Our Accuracy: MAE: {}, RMSE: {}, Time: {}".format(sum(b_mae)/len(b_mae), sum(b_rmse)/len(b_rmse),
+                                                                     sum(b_time)/len(b_time)))
+        print("Lunds Accuracy: MAE: {}, RMSE: {}, Time: {}".format(sum(c_mae)/len(c_mae), sum(c_rmse)/len(c_rmse),
+                                                                     sum(c_time)/len(c_time)))
