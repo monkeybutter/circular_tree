@@ -17,21 +17,22 @@ if __name__ == "__main__":
     for name in names:
         print(name)
 
-        for leaf_size in [25, 50, 100, 250, 500]:
+        for leaf_size in [100]:#[50, 100, 250]:
             print(leaf_size)
             df = pd.read_csv("./datasets/{}_clean.csv".format(name))
-            df = df.drop(["time", "date"], axis=1)
+            df = df.drop(["time", "date", "gfs_wind_spd"], axis=1)
+            df = df.drop(['metar_press', 'metar_temp', 'metar_wind_spd'], 1)
 
             var_desc = {}
             var_desc["gfs_press"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
             var_desc["gfs_rh"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
             var_desc["gfs_temp"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
             var_desc["gfs_wind_dir"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
-            var_desc["gfs_wind_spd"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
+            #var_desc["gfs_wind_spd"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
             #var_desc["time"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
             #var_desc["date"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
 
-            class_var = "metar_wind_spd"
+            class_var = "metar_rh"
 
             a_mae = []
             a_rmse = []
@@ -45,7 +46,9 @@ if __name__ == "__main__":
             c_rmse = []
             c_time = []
 
-            for i in range(3):
+            for i in range(1):
+                """
+                #print("A")
                 var_desc["gfs_wind_dir"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
                 time1 = time.time()
                 mae, rmse = cxval_test(df, class_var, var_desc, leaf_size, seed=i)
@@ -54,14 +57,16 @@ if __name__ == "__main__":
                 a_time.append(time.time()-time1)
                 #print(i)
 
+                #print("B")
                 var_desc["gfs_wind_dir"] = {"type": "cir", "method": "classic", "bounds": [[-np.inf, np.inf]]}
                 time1 = time.time()
                 mae, rmse = cxval_test(df, class_var, var_desc, leaf_size, seed=i)
                 b_mae.append(mae)
                 b_rmse.append(rmse)
                 b_time.append(time.time()-time1)
+                """
 
-                #print(i)
+                #print("C")
                 var_desc["gfs_wind_dir"] = {"type": "cir", "method": "subset", "bounds": [[-np.inf, np.inf]]}
                 time1 = time.time()
                 mae, rmse = cxval_test(df, class_var, var_desc, leaf_size, seed=i)

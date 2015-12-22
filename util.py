@@ -110,6 +110,8 @@ def is_in_bounds(bounds, value):
         if bound[0] > bound[1]:
             if bound[0] <= value <= 360.0 or 0.0 <= value < bound[1]:
                 return True
+        elif bound[0] == 0.0 and value == 360:
+            return True
         else:
             if bound[0] <= value < bound[1]:
                 return True
@@ -197,6 +199,7 @@ def cxval_test(df, class_var, var_desc, leaf_size, variance=0.25, k_folds=5, see
     mae_results = []
 
     for i in range(k_folds):
+        print(i)
         train_df, test_df = cxval_select_fold(i, df_folds)
         tree = tree_planter(train_df, class_var, var_desc, leaf_size, variance)
 

@@ -76,7 +76,16 @@ def transform(name):
     df['gfs_wind_dir'] = df['gfs_wind_dir'].map(lambda x: int(5 * round(float(x)/5)))
     df['gfs_wind_spd'] = df['gfs_wind_spd'].map(lambda x: int(.5 * round(float(x)/.5)))
 
-    df = df.drop(['metar_press', 'metar_rh', 'metar_temp', 'metar_wind_dir'], 1)
+    #df = df.drop(['metar_press', 'metar_rh', 'metar_temp', 'metar_wind_dir'], 1)
+    df = df.drop(['metar_wind_dir'], 1)
 
     df.index = range(0, len(df.index))
     df.to_csv("./{}_clean.csv".format(name))
+
+
+if __name__ == "__main__":
+
+    airports = ["eddt", "egll", "lebl", "lfpg", "limc", "yssy", "zbaa"]
+
+    for airport in airports:
+        transform(airport)

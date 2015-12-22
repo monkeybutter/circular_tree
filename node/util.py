@@ -38,8 +38,10 @@ def bound_bonder(bounds):
 
 def get_outter(values, bound):
     if bound[1] < values[0] or bound[0] > values[1]:
+        #print("X1")
         return [bound]
     else:
+        #print("X2")
         new_bound = []
         if bound[0] < values[0]:
             new_bound.append([bound[0], values[0]])
@@ -81,24 +83,60 @@ def bound_generator(data, index, bounds, circular):
             outter = []
             inner = []
             for bound in bounds:
+                #print(bound)
                 if bound[0] > bound[1]:
                     #print("a")
 
-                    for split in get_outter((data[index[0]], 360.0), [bound[0], 360.0]):
-                        outter.append(split)
-                    for split in get_outter((0.0, data[index[1]]), [0.0, bound[1]]):
-                        outter.append(split)
-                    for split in get_inner((data[index[0]], 360.0), [bound[0], 360.0]):
-                        inner.append(split)
-                    for split in get_inner((0.0, data[index[1]]), [0.0, bound[1]]):
-                        inner.append(split)
+                    if data[index[0]] > data[index[1]]:
+
+                        for split in get_outter((data[index[0]], 360.0), [bound[0], 360.0]):
+                            #print("A1-o", split)
+                            outter.append(split)
+                        for split in get_outter((0.0, data[index[1]]), [0.0, bound[1]]):
+                            #print("B1-o", split)
+                            outter.append(split)
+                        for split in get_inner((data[index[0]], 360.0), [bound[0], 360.0]):
+                            #print("C1-i", split)
+                            inner.append(split)
+                        for split in get_inner((0.0, data[index[1]]), [0.0, bound[1]]):
+                            #print("D1-i", split)
+                            inner.append(split)
+                    else:
+                        for split in get_outter((data[index[0]], data[index[1]]), [bound[0], 360.0]):
+                            #print("A2-o", split)
+                            outter.append(split)
+                        for split in get_outter((data[index[0]], data[index[1]]), [0.0, bound[1]]):
+                            #print("B2-o", split)
+                            outter.append(split)
+                        for split in get_inner((data[index[0]], data[index[1]]), [bound[0], 360.0]):
+                            #print("C2-i", split)
+                            inner.append(split)
+                        for split in get_inner((data[index[0]], data[index[1]]), [0.0, bound[1]]):
+                            #print("D2-i", split)
+                            inner.append(split)
 
                 else:
                     #print("b")
-                    for split in get_outter((data[index[0]], data[index[1]]), bound):
-                        outter.append(split)
-                    for split in get_inner((data[index[0]], data[index[1]]), bound):
-                        inner.append(split)
+                    if data[index[0]] > data[index[1]]:
+                        for split in get_outter((data[index[0]], 360.0), bound):
+                            #print("A3-o", split)
+                            outter.append(split)
+                        for split in get_outter((0.0, data[index[0]]), bound):
+                            #print("B3-o", split)
+                            outter.append(split)
+                        for split in get_inner((data[index[0]], 360.0), bound):
+                            #print("C3-i", split)
+                            inner.append(split)
+                        for split in get_inner((0.0, data[index[0]]), bound):
+                            #print("D3-i", split)
+                            inner.append(split)
+                    else:
+                        for split in get_outter((data[index[0]], data[index[1]]), bound):
+                            #print("A3-o", split)
+                            outter.append(split)
+                        for split in get_inner((data[index[0]], data[index[1]]), bound):
+                            #print("B3-i", split)
+                            inner.append(split)
 
             #print("C Output <-", outter, inner)
             #print("C Output <-", bound_bonder(outter), bound_bonder(inner))
