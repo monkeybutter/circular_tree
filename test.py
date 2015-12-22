@@ -17,22 +17,22 @@ if __name__ == "__main__":
     for name in names:
         print(name)
 
-        for leaf_size in [100]:#[50, 100, 250]:
+        for leaf_size in [50, 100, 250]:
             print(leaf_size)
             df = pd.read_csv("./datasets/{}_clean.csv".format(name))
-            df = df.drop(["time", "date", "gfs_wind_spd"], axis=1)
-            df = df.drop(['metar_press', 'metar_temp', 'metar_wind_spd'], 1)
+            df = df.drop(["time", "date", "gfs_wind_spd", "gfs_rh"], axis=1)
+            df = df.drop(['metar_press', 'metar_temp', 'metar_rh'], 1)
 
             var_desc = {}
             var_desc["gfs_press"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
-            var_desc["gfs_rh"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
+            #var_desc["gfs_rh"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
             var_desc["gfs_temp"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
             var_desc["gfs_wind_dir"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
             #var_desc["gfs_wind_spd"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
             #var_desc["time"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
             #var_desc["date"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
 
-            class_var = "metar_rh"
+            class_var = "metar_wind_spd"
 
             a_mae = []
             a_rmse = []
@@ -47,7 +47,7 @@ if __name__ == "__main__":
             c_time = []
 
             for i in range(1):
-                """
+
                 #print("A")
                 var_desc["gfs_wind_dir"] = {"type": "lin", "method": "classic", "bounds": [[-np.inf, np.inf]]}
                 time1 = time.time()
@@ -64,7 +64,6 @@ if __name__ == "__main__":
                 b_mae.append(mae)
                 b_rmse.append(rmse)
                 b_time.append(time.time()-time1)
-                """
 
                 #print("C")
                 var_desc["gfs_wind_dir"] = {"type": "cir", "method": "subset", "bounds": [[-np.inf, np.inf]]}
