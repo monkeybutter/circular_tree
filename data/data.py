@@ -70,7 +70,6 @@ class Data(object):
                             raise StopIteration
                         else:
                             if self.var_desc[self.input_vars[self.iter_var]]["method"] == "classic":
-
                                 if self.var_desc[self.input_vars[self.iter_var]]["type"] == "cir" and self.var_desc[self.input_vars[self.iter_var]]["bounds"] == [[-np.inf, np.inf]]:
                                     self.iter_i = [0, 0]
                                 else:
@@ -103,13 +102,13 @@ class Data(object):
         best_split = {'var_name': None, 'score': 0.0, 'index': [None, 0]}
 
         for (var_i, i, left, right) in self:
+            #print(self.input_vars[var_i])
             score = get_score(left, right)
             if score > best_split['score']:
                 best_split.update({'var_name': self.input_vars[var_i], 'score': score, 'index': i[:]})
 
         """ Tracking nodes
         if len(self.df.index) == 2925:
-
         """
 
         return best_split

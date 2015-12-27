@@ -68,12 +68,12 @@ def transform(name):
 
     df['date'] = df['date'].map(lambda x: datetime.strptime(x, '%Y-%m-%d'))
     df['date'] = df['date'].map(lambda x: (x.timetuple().tm_yday / 365.0)*360.0)
-    df['date'] = df['date'].map(lambda x: int(5 * round(float(x)/5)))
+    df['date'] = df['date'].map(lambda x: int(10 * round(float(x)/10)))
 
     df['gfs_press'] = df['gfs_press'].map(lambda x: int(round(float(x))))
     df['gfs_rh'] = df['gfs_rh'].map(lambda x: int(round(float(x))))
     df['gfs_temp'] = df['gfs_temp'].map(lambda x: int(round(float(x))))
-    df['gfs_wind_dir'] = df['gfs_wind_dir'].map(lambda x: int(5 * round(float(x)/5)))
+    df['gfs_wind_dir'] = df['gfs_wind_dir'].map(lambda x: int(10 * round(float(x)/10)))
     df['gfs_wind_spd'] = df['gfs_wind_spd'].map(lambda x: int(.5 * round(float(x)/.5)))
 
     #df = df.drop(['metar_press', 'metar_rh', 'metar_temp', 'metar_wind_dir'], 1)
