@@ -355,7 +355,7 @@ Figure \ref{f3} shows an example of how a circular tree partitions the space def
 
 It is worth noting that the previous example does not exactly represent a circular tree as introduced by Lund. What Lund proposes is the use of the '$\in$' and '$\notin$' operators just for the circular variables and the '$>$' and '$<$' operators for the linear ones. Therefore, circular trees produce non-contiguous regions only when a node of the tree creates a split based on a circular variable.
 
-The space splitting performed by the '$>$' and '$<$' operators in classical trees can be seen as a particular case of the more general range selection performed by the '$\in$' and '$\notin$' operators in circular trees. The former assumes the bounds of the space to remain constant and finds a value within its range to split it in two contiguous regions. The latter, on the other hand, finds an inner sub-region contained in a space by identifying two delimiter values. These two values also define an outer sub-region, one at each side of the inner one, which is therefore non-contiguous.
+The space splitting performed by the '$>$' and '$<$' operators in classic linear regression trees can be seen as a particular case of the more general range selection performed by the '$\in$' and '$\notin$' operators in circular trees. The former assumes the bounds of the space to remain constant and finds a value within its range to split it in two contiguous regions. The latter, on the other hand, finds an inner sub-region contained in a space by identifying two delimiter values. These two values also define an outer sub-region, one at each side of the inner one, which is therefore non-contiguous.
 
 The process described in Section 3.1, based on the '$>$' and '$<$' operators, can be seen as a particular case of the more general search in the space performed by the '$\in$' and '$\notin$' operators. Any contiguous split can be seen as a subset in which one of its bounds is shared with the original space. Partitioning the space by using the '$\in$' and '$\notin$' operators generates all the contiguous and non contiguous splits. As it considers more options, it will have better chances of finding a good partition, at the expense of doing more computations. The next subsection provides a quantitative comparison between the computational cost of building trees using contiguous and non-contiguous splits.
 
@@ -384,11 +384,11 @@ Regression trees are a very popular machine learning algorithm, because they are
 
 Efficiency and computational cost of the different implementations of regression trees is relevant when the objective is to scale to a large number of trees. Optimising resources when analysing big data sets is of high interest nowadays, in order to reduce costs and execution times. There are several approaches for training trees using data sets that do not fit in the system memory \citep{Rokach2016}, such as SPRINT \citep{Shareretal1996}, SLIQ \citep{Mehtaetal1996} or FastC4.5 \citep{Heetal2007}. Most of the current efficient tree implementations are built upon the principles presented by these algorithms.
 
-The building process of a regression tree can be separated in two phases: growth and prune. In the growth phase, the space is recursively partitioned, defining the nodes of the tree until the stop criteria is satisfied. The cost of evaluating splits in classic linear regression trees is dominated by the computational cost of sorting its values \citep{Shareretal1996}. All the possible splits are considered and evaluated, using a cost function to identify the best split. This operation has a computational cost of $\mathcal{O}(n)$, where $n$ represents the number of distinct elements contained by the variable.
+The building process of a regression tree can be separated in two phases: growth and prune. In the growth phase, the space is recursively partitioned, defining the nodes of the tree until the stop criteria is satisfied. The cost of evaluating splits in linear regression trees is dominated by the computational cost of sorting its values \citep{Shareretal1996}. All the possible splits are considered and evaluated, using a cost function to identify the best split. This operation has a computational cost of $\mathcal{O}(n)$, where $n$ represents the number of distinct elements contained by the variable.
 
-Classic regression trees use a methodology which divides the space in two halves each time, by selecting one value within the range of its variables. The case of dividing the space in two halves by selecting one value is different to the case of having to find a subset contained anywhere within the range. This requires traversing the space considering all the possible combinations of the start and end bounds for the subset. This operation is much more expensive and has a quadratic complexity $\mathcal{O}(n^2)$.
+Classic linear regression trees use a methodology which divides the space in two halves each time, by selecting one value within the range of its variables. The case of dividing the space in two halves by selecting one value is different to the case of having to find a subset contained anywhere within the range. This requires traversing the space considering all the possible combinations of the start and end bounds for the subset. This operation is much more expensive and has a quadratic complexity $\mathcal{O}(n^2)$.
 
-Just the difference in the computational cost of these two splitting methods justifies the approach followed by classic regression trees when efficiency matters. In the next section, some experiments are carried out to compare the accuracy of both methodologies.
+Just the difference in the computational cost of these two splitting methods justifies the approach followed by linear regression trees when efficiency matters. In the next section, some experiments are carried out to compare the accuracy of both methodologies.
 
 As has been demonstrated in the previous subsection, finding inner regions by defining both values for its boundaries, leads the tree to recursively fragment the space in non-contiguous or disjoint regions. Figure 5 shows an example where the space defined by a variable is recursively split, in a tree generating non-contiguous regions.
 
@@ -406,11 +406,11 @@ As has been demonstrated in the previous subsection, finding inner regions by de
 
 Characterising the number of non-contiguous regions at each node is not an intuitive task. It depends on the number of nodes inherited from its parent node and on how the new split is made. This number is bounded by 1 and $l$, where $l$ represents the depth level of the node in the tree, starting at its root.
 
-A consequence of this is that for deep trees, trees with a large number of levels, the fragmentation level at some of the nodes can be substantial. This contrasts with the case of classical regression tress, where each node contains just one contiguous region of the original data set at any level of the tree. Fragmentation of the space contained by nodes comes at the price of increasing the computational cost, memory consumption and complexity of the algorithm that generates the tree.
+A consequence of this is that for deep trees, trees with a large number of levels, the fragmentation level at some of the nodes can be substantial. This contrasts with the case of linear regression tress, where each node contains just one contiguous region of the original data set at any level of the tree. Fragmentation of the space contained by nodes comes at the price of increasing the computational cost, memory consumption and complexity of the algorithm that generates the tree.
 
-Efficient implementations of classical regression trees optimise memory consumption by storing references to regions of the original data set at each node. This model has the benefit that only one copy of the data set is stored in memory. If the data set is stored in the form of pre-sorted columns, each node will only have to keep two references: the minimum and maximum values of the variable, as proposed in SPRINT \cite{Shareretal1996}.
+Efficient implementations of classic linear regression trees optimise memory consumption by storing references to regions of the original data set at each node. This model has the benefit that only one copy of the data set is stored in memory. If the data set is stored in the form of pre-sorted columns, each node will only have to keep two references: the minimum and maximum values of the variable, as proposed in SPRINT \cite{Shareretal1996}.
 
-Fragmentation of the space forces the tree structure to keep track of the boundaries for each region. This increases the complexity of nodes and increments memory use proportionally to the number of fragments in the node. Many research efforts have been made in the field of disjoint set unions, and there are many strategies than can help to structure and optimise its performance \cite{RefI}. Nonetheless, working with contiguous regions makes unnecessary any optimisation of the algorithms and provides a simpler solution.
+Fragmentation of the space forces the tree structure to keep track of the boundaries for each region. This increases the complexity of nodes and increments memory use proportionally to the number of fragments in the node. Many research efforts have been made in the field of disjoint set unions, and there are many strategies than can help to structure and optimise its performance \citep{Galil1991}. Nonetheless, working with contiguous regions makes unnecessary any optimisation of the algorithms and provides a simpler solution.
 
 Table \ref{t1} represents a comparison between the number of non-contiguous regions stored by a particular node for different levels of a tree, considering contiguous and non-contiguous regions.
 
@@ -434,7 +434,7 @@ $n$ & $2$ & $2n$\\
 \end{center}
 \end{table*}
 
-Our proposal of methodology to build circular trees generates only contiguous splits in the space. It is therefore oriented to achieve maximum efficiency and it can scale up to be used in ensemble algorithms. Its main benefit is that the computationally expensive operation of finding the optimal subset for a circular variable, $\mathcal{O}(n^2)$, is only performed once (the first time the variable is used). All subsequent splits for that variable will be computed with $\mathcal{O}(n)$ cost. Producing contiguous regions in the splits means that the complexity of the nodes is constant, and concepts and implementations designed for classical regression trees can be easily applied.
+Our proposal of methodology to build circular trees generates only contiguous splits in the space. It is therefore oriented to achieve maximum efficiency and it can scale up to be used in ensemble algorithms. Its main benefit is that the computationally expensive operation of finding the optimal subset for a circular variable, $\mathcal{O}(n^2)$, is only performed once (the first time the variable is used). All subsequent splits for that variable will be computed with $\mathcal{O}(n)$ cost. Producing contiguous regions in the splits means that the complexity of the nodes is constant, and concepts and implementations designed for linear regression trees can be easily applied.
 
 The accuracy of the results produced by a tree depends on how well the partitioned space represents the correlations between its variables. As was pointed out in the previous section, non-contiguous splits provide more options to partition the space, and therefore improves the chances of finding a better partition. Regression trees are built using a greedy algorithm. Each node selects the best split individually without considering how the split generalises for subsequent splits. If a tree selects a non-contiguous split at one of its nodes is because the correlation between the values of the considered variable is higher than any of the contiguous splits. How non-contiguous splits can generalise along a tree highly depends on the data set and the relationships between its variables.
 
@@ -522,31 +522,31 @@ $Airport$ & $Tree\ Version$ & \multicolumn{6}{|c|}{Max Leaf Size}\\
 $$ & $$ & \multicolumn{2}{|c|}{50} & \multicolumn{2}{|c|}{100} & \multicolumn{2}{|c|}{250}\\
 $$ & $$ & $RMSE$ & $CPU(s)$ & $RMSE$ & $CPU(s)$ & $RMSE$ & $CPU(s)$\\
 \hline
-EDDT & Classic  & 3.844 & 16 & 3.868 & 27 & 4.013 & 39\\
+EDDT & Linear  & 3.844 & 16 & 3.868 & 27 & 4.013 & 39\\
 EDDT & Proposed & 3.822 & 23 & 3.854 & 36 & 3.981 & 53\\
 EDDT & Lund's & 3.994 & 34 & 3.989 & 50 & 4.055 & 71\\
 \hline
-EGLL & Classic  & 3.094 & 15 & 3.147 & 24 & 3.257 & 35\\
+EGLL & Linear  & 3.094 & 15 & 3.147 & 24 & 3.257 & 35\\
 EGLL & Proposed  & 3.053 & 22 & 3.083 & 35 & 3.241 &50\\
 EGLL & Lund's & 3.260 & 33 & 3.227 & 48 & 3.250 & 65\\
 \hline
-YSSY & Classic  & 2.634 & 16 & 2.625 & 22 & 2.670 & 29\\
+YSSY & Linear  & 2.634 & 16 & 2.625 & 22 & 2.670 & 29\\
 YSSY & Proposed  & 2.613 & 21 & 2.601 & 30 & 2.680 & 39\\
 YSSY & Lund's & 2.743 & 36 & 2.699 & 50 & 2.727 & 62\\
 \hline
-ZBAA & Classic  & 3.493 & 20 & 3.540 & 34 & 3.841 & 55\\
+ZBAA & Linear  & 3.493 & 20 & 3.540 & 34 & 3.841 & 55\\
 ZBAA & Proposed  & 3.354 & 26 & 3.374 & 44 & 3.524 & 64\\
 ZBAA & Lund's & 3.843 & 32 & 3.851 & 54 & 3.864 & 80\\
 \hline
-LEBL & Classic  & 2.234 & 18 & 2.264 & 30 & 2.345 & 36\\
+LEBL & Linear  & 2.234 & 18 & 2.264 & 30 & 2.345 & 36\\
 LEBL & Proposed  & 2.202 & 25 & 2.232 & 41 & 2.316 & 52\\
 LEBL & Lund's & 2.561 & 31 & 2.525 & 46 & 2.521 & 61\\
 \hline
-LFPG & Classic  & 3.586 & 17 & 3.595 & 27 & 3.699 & 39\\
+LFPG & Linear  & 3.586 & 17 & 3.595 & 27 & 3.699 & 39\\
 LFPG & Proposed  & 3.545 & 24 & 3.567 & 38 & 3.691 & 54\\
 LFPG & Lund's & 3.843 & 33 & 3.794 & 48 & 3.766 & 63\\
 \hline
-LIMC & Classic  & 3.753 & 18 & 3.779 & 29 & 3.898 & 43\\
+LIMC & Linear  & 3.753 & 18 & 3.779 & 29 & 3.898 & 43\\
 LIMC & Proposed  & 3.883 & 24 & 3.749 & 39 & 3.765 & 58\\
 LIMC & Lund's & 3.865 & 30 & 3.819 & 48 & 3.848 & 66\\
 \hline

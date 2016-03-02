@@ -1,0 +1,68 @@
+Pablo,
+
+acabo de leer los cambios que le has introducido al paper. Los veo pobres y sin mimo, me toca decirte lo que pienso.
+
+- El párrafo introducido con el uso del test de Friedman en la comparativa. Tiens muchas imprecisiones.
+- Echo de menos frases (pags.4-5) sobre la no-correlación de las regiones generadas en los splits no-contiguos, sobre-fragmentación y mayor profundidad en Lund, regiones-arcos-angulares de split pequeñas con Lund que en la parte baja del árbol generan alto error de test e incluso training... Echo en falta datos empíricos que evidencien la mayor complejidad de los árboles de Lund. Soy más preciso más adelante. En esta línea, lo que hablé el otro día contigo por skype fue mucho más rico que lo que has escrito.
+
+Mis comentarios precisos al final del mail.
+
+Ya te hemos dado Lozano y yo nuestra opinión que, teniendo en cuenta que le decisión es enviar el paper a una revista donde se valora la metodología, el avance metodológico respecto a la propuesta de Lund es pequeño.
+Pero lo que tengamos, vistámoslo bonito.
+Ya sé que estás cansado y con ganas de cambiar. Pero este negocio es así, Pablo.
+
+
+
+COMENTARIOS PRECISOS
+- abstract:
+-- a new methodology --> da una pista sobre qué tiene tu avance. "a new splitting methodology for producing contiguous splits in circular regression trees, inspired in the way classic linear trees operate".
+-- computational performance --> computational efficiency
+-- "when compared to other methodologies" --> precisa a cuales. Lund y linear
+
+Le sigues llamando en el paper "classic" a la metodología lineal. Incluso en las gráficas de comparativa. Creo que es más preciso "lineal".
+
+Insistiría más veces en la idea en que la idea de contiguous-splits que propones se inspira en la forma en la que los árboles lineales hacen los splits, independientemente de la métrica.
+
+Ya que mencionamos que el método de Lund tiende a generar árboles más "complejos", más regiones angulares y por resultado más pequeñas que la propuesta contigua...
+¿Se puede dar una tabla con datos que justifiquen esta "complejidad"? i.e. tamaños medio angular de los splits de Lund y por otro lado de los contiguos. Y dar datos sobre cuántos splits de media hay en los árboles de Lund y por otro lado en los contiguous. Y dar datos sobre la profundidad media de ambos métodos... lo que se te ocurra para "justificar" la mayor complejidad de los árboles no-contiguos.
+
+
+- párrafo nuevo de pág4. ¿No es mejor hacer esta motivación únicamente para las circulares? Creo que es suficiente, y además nuestro paper no se centra en las lineales.
+Y el ejemplo que pones en Fig2, no lo veo, seguro que me falta pericia. ¿De dónde va el split pertence_[a,b] en X1? Lo ubicas en los dos extremos de X1. Pero entiendo que tiene que ser una zona "central" de X1, dejando a ambos extremos más zonas.
+
+
+- tienes un interrogante en pág6, columna derecha
+
+- Pablo, después de lo que te escribí sobre redactar la metodología de Demsar me he quedado helado con lo que he visto. Aparte de lo escrito por mí, que entiendo perfectamente no te gustara, tienes cientos de papers que redactan elegantemente su uso.
+Te escribo una propuesta a partir de donde está tu letra negrita:
+ "For each leaf size, the methodology proposed by Demsar'2006 is used to assess the statistical significance of the differences between compared algorithms. First, a Friedman rank sum test is used to assess the similarity of the group of compared algorithms. The null hypothesis of similarity is rejected for each leaf size; this justifies the use of pot-hoc bivariate tests (Nemenyi test, in our case), which assess the statistical difference between pairs of algorithms".
+
+Aclararía que "Note that lower ranked algorithm in CD diagrams implies better RMSE value".
+
+"p<0.05 as CD diagrams" ¿as?
+
+"As can be seen in the diagrams shown in Figure 6, the proposed methodology outperforms the other two" --> debes ser más preciso porque esto no es así para leaf-size=50.
+Entiendo que esto nos rompe un poco el esquema mental del análisis, porque son árboles más profundos, en los que según nuestras hipótesis, el método de Lund sobrefragmentaría más si cabe, que es su Talón de Aquiles.
+
+
+
+
+
+El 01/03/16 a las 12:32, Pablo Rozas Larraondo escribió:
+Hola,
+
+Gracias por vuestras correcciones y comentarios. He tratado de seguir todas las recomendaciones en esta nueva version. Segun lo sugerido por Iñaki, he puesto las adiciones de texto en cursiva negrita para resaltarlas.
+
+Lo unico que no he hecho ha sido recortar algunos de los parrafos en los que me deciais que era redundante u obvio. No se, en el anterior paper me dieron caña diciendo que no habia explicado las cosas suficientemente, asi que en este prefiero pasarme a quedarme corto. Si los revisores me dicen de cortar partes las eliminare encantado.
+
+Tengo unas ganas enormes de mandar este paper. Me gustaria poder hacerlrlo esta semana, porque no se si voy a poder aguantar el abrir este archivo de latex muchas mas veces... Si le podeis echar un vistazo rapido y me decis que os parece os lo agradecere de todo corazon.
+
+Voy a escribir una pequena nota explicando el tema del envio previo, el change of focus y el major restructure. Os lo envio cuando lo tenga para que me digais lo que os parece.
+
+Agur,
+Pablo
+
+
+-Figuras corregidas: "linear" en vez de "classic"
+-En el paper tambien he sustituido el termino "classic" por "linear" o "classic linear" en texto y tablas
+-Referencia en pag 6 corregida
