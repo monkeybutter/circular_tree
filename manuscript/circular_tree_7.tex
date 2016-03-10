@@ -261,27 +261,16 @@ A decision tree is a predictive model in which a data set is recursively partiti
 
 Regression trees have been a popular and effective technique in forecasting linear variables because of their simplicity and fast training characteristics. As the size of scientific data sets rapidly grows, there is an urgent need to come up with efficient algorithms that are able to cope with this growth. This paper proposes a different methodology to incorporate circular variables into regression trees, reducing the computational cost of Lund's proposal from $\mathcal{O}(n^2)$ to $\mathcal{O}(n)$. This methodology equates the treatment of circular variables to how linear variables are treated in the CART model. This results in a simpler algorithm which is also able produce more accurate results.
 
-The following sections in this paper are structured in the following way: Section 2 covers the basics of circular variables and how basic statistics are calculated. Section 3 contains a detailed description of different ways of generating regression trees, first for linear variables and second for circular variables. The section ends with a comparison between the original and proposed methodology for building circular regression trees. Section 4 contains a series of experiments that compare efficiency and accuracy figures for classic linear regression trees and both versions of circular regression trees. Section 5 contains the conclusions and proposes some lines that could be further investigated based on this work.
-
-\section{Circular statistics}
-A circular variable is defined as a numerical variable whose values are constrained into a cyclical space. For example, a variable measuring angles in radians, spans between 0 and 2$ \pi $, where both values represent the same point in space. 
-
-A circular variable defines a circular space. A circular space is cyclic in the sense that it does not have bounds, even the notion of a minimum and maximum values does not apply. The distance between two values in the space is also an ambiguous concept, as it can be measured in clockwise and anticlockwise directions yielding different results. For these reasons the '$<$' and '$>$' operators are ill defined in circular spaces.
-
-Circular statistics is the field of statistics that studies circular variables. Due to the different nature of circular variables, basic statistics, such as the mean or standard deviation, need to be calculated using different methods than the ones used for linear variables. A sample mean of a linear variable is normally calculated using the arithmetic mean of the observations. The arithmetic mean cannot be used to estimate the mean of a circular variable. For example, if the arithmetic mean formula is used to estimate the mean of the arc degrees with values 1 and 359, the result is (1 + 359)/2 = 180, which is different to the expected 0 or 360.
-
-\citep{Fisher1992} presents the definition of vector $ \vec{\rho} $, which provides a convenient way of characterising circular variables. Considering a list of values$ [\alpha_1, \alpha_2, \dots, \alpha_n] $ representing a sample of a circular variable with values comprising $ [0, 2\pi] $, the vector $ \vec{\rho} $ is defined as:
-
-\begin{displaymath}
-\vec{\rho} = \left(\frac{1}{n}\cdot\sum_{i=1}^n \sin\alpha_i, \frac{1}{n}\cdot\sum_{i=1}^n \cos\alpha_i\right)
-\end{displaymath}
-
-This formula aggregates the contribution of all the different values in the sample into one vector. The argument of $ \vec{\rho} $ represents the mean and its module can be related to the variance of the sample. The estimators for the mean $ \hat{\theta}_{\mu} $ and for the standard deviation $ \hat{\theta}_{\sigma} $ are defined as: 
-
-$ \hat{\theta}_{\mu} $ and $ \hat{\theta}_{\sigma} $ represent the mean and standard deviation of the sample, respectively. $ \hat{\theta}_{\sigma} $ is a function with range [0, 1] where 0 indicates that all the values are equal and 1 indicates maximum dispersion in the sample.
+The following sections in this paper are structured in the following way: Section 2 contains a detailed description of different ways of generating regression trees, first for linear variables and second for circular variables. The section ends with a comparison between the original and proposed methodology for building circular regression trees. Section 3 contains a series of experiments that compare efficiency and accuracy figures for classic linear regression trees and both versions of circular regression trees. Section 4 contains the conclusions and proposes some lines that could be further investigated based on this work.
 
 
 \section{Circular Regression Trees}
+
+A circular variable is defined as a numerical variable whose values are constrained into a cyclical space. For example, a variable measuring angles in radians, spans between 0 and 2$ \pi $, where both values represent the same point in space. 
+
+Circular statistics is the field of statistics that studies circular variables. Due to the different nature of circular variables, basic statistics, such as the mean or standard deviation, need to be calculated using different methods than the ones used for linear variables. For example, if the arithmetic mean formula is used to estimate the mean of the arc degrees with values 1 and 359, the result is (1 + 359)/2 = 180, which is different to the expected 0 or 360. \citep{Fisher1992} presents in his work the statistical methodologies for circular variables.
+
+A circular variable defines a circular space. A circular space is cyclic in the sense that it does not have bounds, even the notion of a minimum and maximum values does not apply. The distance between two values in the space becomes an ambiguous concept, as it can be measured in clockwise and anticlockwise directions yielding different results. For these reasons the '$<$' and '$>$' operators are ill defined in circular spaces.
 
 Circular Regression Trees is a concept proposed by Lund \citep{Lund2002} to introduce circular covariates in regression trees. Lund, in his paper, builds upon Breiman's earlier work on Classification and Regression Trees (CART) \citep{Breimanetal1984}. Lund discusses the particularities of circular variables and designs a methodology to create regression trees that can combine categorical, linear and circular variables.
 
@@ -413,12 +402,12 @@ Fragmentation of the space forces the tree structure to keep track of the bounda
 Table \ref{t1} represents a comparison between the number of non-contiguous regions stored by a particular node for different levels of a tree, considering contiguous and non-contiguous regions.
 
 % For tables use
-\begin{table*}[t]
+\begin{table}[t]
 \caption{Comparison of the growing complexity of tree nodes.}\label{t1}
 \begin{center}
 \begin{tabular}{rrrr}
 \hline\hline
-$Tree\ Level$ & $Max\ regions\ (Contiguous)$ & $Max\ regions\ (Non-Contiguous)$\\
+$Tree\ Level$ & $Max\ Contig$ & $Max\ Non-Contig$\\
 \hline
 $1$ & $0$ & $0$\\
 $2$ & $2$ & $4$\\
@@ -430,7 +419,7 @@ $n$ & $2$ & $2n$\\
 \hline
 \end{tabular}
 \end{center}
-\end{table*}
+\end{table}
 
 Our proposed methodology for building circular trees generates only contiguous regions with their splits. This is also a characteristic of how classical linear regression trees partition the space. It is therefore oriented to achieve maximum efficiency and it can scale up to be used in ensemble algorithms. Its main benefit is that the computationally expensive operation of finding the optimal subset for a circular variable, $\mathcal{O}(n^2)$, is only performed once (the first time the variable is used). All subsequent splits for that variable will be computed with $\mathcal{O}(n)$ cost. Producing contiguous regions in the splits means that the complexity of the nodes is constant, and concepts and implementations designed for linear regression trees can be easily applied.
 
@@ -477,27 +466,11 @@ The hypothesis of this study is that our proposed methodology for generating cir
 
 In order to prove the previous statement, a general version of regression tree is implemented where each of the input variables can be tagged as \{"linear", "circular"\} and \{"contiguous", "non-contiguous"\}. These two tags indicate the kind of data and split methodology to be applied when computing the tree respectively. Different values of these tags will indicate different versions of regression trees.
 
-A set of experiments is carried out to compare the computational efficiency and accuracy of these three versions of regression trees. Using the data sets described above, observed METAR temperature is considered as the target variable and the rest of the variables are the input variables. The classical linear version considers all the input variables to be linear. The circular versions consider Date and Time as circular variables and the rest of the input variables as linear. Table \ref{t3} represents the tags that each input variable receives for each version of the tree: classic linear regression, our proposed methodology based on contiguous circular splits and Lund's proposal of non-contiguous circular splits.
-
-\begin{table*}[t]
-\caption{Tagged input variables for the different versions of regression trees.}\label{t3}
-\begin{center}
-\begin{tabular}{llllll}
-\hline\hline
-$Name$ & \multicolumn{4}{c}{Input Variables} \\ \hline
- & $Date$ & $Time$ & $GFS\ RH$ & $GFS\ Wind\ speed $\\
-\hline
-Linear Contiguous & lin, con & lin, con & lin, con & lin, con\\
-Circular Contiguous & cir, con & cir, con & lin, con & lin, con\\
-Circular Non-Contiguous & cir, non-con & cir, non-con & lin, con & lin, con\\
-\hline
-\end{tabular}
-\end{center}
-\end{table*}
+A set of experiments is carried out to compare the computational efficiency and accuracy of these three versions of regression trees. Using the data sets described above, observed METAR temperature is considered as the target variable and the rest of the variables are the input variables. The classical linear version considers all the input variables to be linear. The circular versions consider Date and Time as circular variables and the rest of the input variables as linear. 
 
 The stop criterium for all trees is based on the number of elements in a node. Splits are recursively performed until the number of data entries in a node falls below a certain value. Then, the splitting process is stopped and the node is denoted as leaf. This value receives the name of ”maximum leaf size”. Large values of ”maximum leaf size” generate shallow trees, whereas small values will generate deep trees. Each version of the considered trees is evaluated using three maximum leaf sizes: 250, 100 and 50.
 
-To evaluate the differences in accuracy between each of these tree methodologies, a 5-fold cross validation procedure is used. The cross validation process splits the data into five sub-samples. One of the sub-samples, each time, is used to validate the results of the tree trained using the content of the remaining four sub-samples: these two groups are called test and training sub-samples, respectively. To avoid differences in the results caused by different partitions in the validation process, the same partition is used to validate the three methodologies for the different values of the ”maximum leaf size” parameter.
+To evaluate the differences in accuracy between each of these tree methodologies, a 5-fold cross validation procedure is used. To avoid differences in the results caused by different partitions in the validation process, the same 5-fold partition is used to validate the three methodologies for the different values of the ”maximum leaf size” parameter.
 
 The error in forecasting a single value is defined as the difference between the temperature predicted by the tree, which is the mean of the target values contained in the selected leaf, and the observed METAR temperature value. At the end of the cross validation process, the Root Mean Square Error (RMSE) is calculated for each tree and airport.
 
