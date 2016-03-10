@@ -483,7 +483,7 @@ It is worth mentioning that execution times are highly dependent on the architec
 
 Table \ref{t4} shows the accuracy, measured using RMSE, and the efficiency, measured in CPU seconds, for the different trees, leaf sizes and airports. The accuracy results can be better interpreted when represented as a series of plots.
 
-Figure \ref{f6} contains a graphical representation of the RMSE values of the different experiments. Looking at the plots it can be observed that the best accuracy for every airport is achieved by the proposed version of circular tree. To statistically compare the results of the different algorithms each leaf size is considered as a different experiment which needs to be validated independently. For each leaf size we have the RMSE values for the seven airports and three methodologies. A non-parametric Friedman test is used to control the variability between methodologies. For each leaf size, the methodology proposed by \citep{Demsar2006} is used to assess the statistical significance of the differences between compared algorithms. The null hypothesis of similarity is rejected for each leaf size; this justifies the use of post-hoc bivariate tests (Nemenyi test, in our case), which assess the statistical difference between pairs of algorithms. The results of this test can be graphically expressed using Critical Difference (CD) diagrams.
+Figure \ref{f6} contains a graphical representation of the RMSE values for the three methodologies and three leaf sizes for one of the airports. Looking at the RMSE results it can be observed that the best accuracy for every airport is achieved by the proposed version of circular tree. To statistically compare the results of the different algorithms each leaf size is considered as a different experiment which needs to be validated independently. For each leaf size we have the RMSE values for the seven airports and three methodologies. A non-parametric Friedman test is used to control the variability between methodologies. For each leaf size, the methodology proposed by \citep{Demsar2006} is used to assess the statistical significance of the differences between compared algorithms. The null hypothesis of similarity is rejected for each leaf size; this justifies the use of post-hoc bivariate tests (Nemenyi test, in our case), which assess the statistical difference between pairs of algorithms. The results of this test can be graphically expressed using Critical Difference (CD) diagrams.
 
 \begin{table*}[t]
 \caption{RMSE in predicting the observed METAR wind speed and CPU time for the different airports using the different versions of regression trees.}\label{t4}
@@ -526,17 +526,17 @@ LIMC & Lund's & 3.865 & 30 & 3.819 & 48 & 3.848 & 66\\
 \end{center}
 \end{table*}
 
-\begin{figure*}
+\begin{figure}
   %%\includegraphics[width=8cm]{berlin.png}
   %%\includegraphics[width=8cm]{heathrow.png}
-  \includegraphics[width=8cm]{sydney.png}
+  %%\includegraphics[width=8cm]{sydney.png}
   %%\includegraphics[width=8cm]{beijing.png}
   \includegraphics[width=8cm]{barcelona.png}
   %%\includegraphics[width=8cm]{charles.png}
   %%\includegraphics[width=8cm]{milano.png}
-\caption{RMSE values for the airports of Sydney and Barcelona comparing the accuracy of regression trees for different maximum leaf sizes.}
+\caption{RMSE values for the airport of Barcelona-El Prat comparing the accuracy of regression trees for different maximum leaf sizes.}
 \label{f6}
-\end{figure*}
+\end{figure}
 
 The Nemenyi test pairwise compares every methodology. The accuracy of two methodologies is significantly different if the corresponding average rank differs by at least the critical difference. Figure \ref{f7} contains a representation of the results of the Nemenyi test comparing RMSE results for the three methodologies, one test per leaf size. These tests have been performed using the \textit{scmamp} R package publicly available at the Comprehensive R Archive Network (CRAN) \citep{Calvo2015}. Figure \ref{f7} represents the results of this test for a significance level $ p < 0.05 $ making use of CD diagrams.  These diagrams connect the groups of algorithms that are not significantly different, or in other words, whose distance is less than the critical difference, shown above the graph. As can be seen in the diagrams shown in Figure \ref{f7}, the proposed methodology outperforms the other two. Note that higher ranked algorithms in CD diagrams implies lower RMSE values.
 
