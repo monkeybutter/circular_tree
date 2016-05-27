@@ -1,0 +1,16 @@
+The Reviewers' comments are as follows:
+
+***********************************************************
+
+Associate Editor:Thanks for submitting your manuscript to the Pattern Recognition Letters journal. Your paper has been reviewed by two expert reviewers. Following the reviewers' comments, your paper may not be published in its current form, and it will require a major revision before it may be reconsidered. In the revised version, the authors need to successfully address all comments made by the reviewers. Also, the authors are advised to clarify the novel contributions in their current work.
+
+
+Reviewer #2: The main take-away message from this ms, as far as I understand it, is that if one has an input attribute that is circular, one should not use the standard splitting into two by checking against a threshold; there may be a smarter alternative. That is a valid statement and is important to know, but I'm not sure if this message leads to a new decision tree method and justifies this publication, given also the fact that in the experiments, the default linear splitting does not work very badly. The proposed method seems a minor contribution, in my opinion.
+
+My main understanding from the ms is that Lund's approach is bad, and even worse than the linear method where no special processing is done. I am not sure whether we have sufficient proof that the proposed method works better than the linear method given small differences in Table 2.
+
+All data sets used are variants of the same task and it would be nice to have a comparison on a number of tasks. Since the proposed method involves splitting in the decision nodes and not the leaf contents, I imagine the same approach can also be used in classification trees where some of the inputs are circular.
+
+In Fig 1 (and onwards), it would be nice to mark the thresholds of the tree on the left in the plot on the right (Fig 1 does not seem right!). The bar showing the range of color on the very right is not meaningful, we do not have a continuous value visualized here. But it may be nice to color the leaves of the tree on the left by the colors of the patches on the right.
+
+Fig 4 which is the core of your contribution should have a longer legend of explanation and justification.
