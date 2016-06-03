@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
     names = ["eddt", "egll", "yssy", "zbaa", "lebl", "lfpg", "limc"]
 
-    lin_group = ['gfs_rh', 'gfs_wind_spd']
+    lin_group = ['gfs_wind_spd']
     cir_group = ['time', 'date']
     class_var = 'metar_temp'
 
@@ -17,6 +17,7 @@ if __name__ == "__main__":
 
     for name in names:
 
+        #for bin_size in [50, 100, 250]:
         for bin_size in [50, 100, 250]:
             rmse_a, rmse_b, rmse_c = [], [], []
             time_a, time_b, time_c = [], [], []
