@@ -6,25 +6,20 @@ class Data(object):
     __class_description__ = """Class modelling Data a Binary Tree based on Pandas DataFrame"""
     __version__ = 0.1
 
-    def __init__(self, df, class_var, var_desc):  # , first=True):
+    def __init__(self, df, class_var, var_desc):
         self.df = df.copy()
-        # self.df.dropna(inplace=True)
 
         # Dict with the info of input variables
         self.var_desc = var_desc
         self.class_var = class_var
 
-        # This is here because we need a persistent way of traversing the variables (for the iterators)
-        self.input_vars = list(self.var_desc.keys())
-
-        self.iter_i = [None, None]
-        self.iter_var = None
-        self.iter_idx = [None]
 
     def sort_by(self, col_name):
         self.df = self.df.sort_values(col_name)
 
         if self.var_desc[col_name]["type"] == 'cir':
+            #print(col_name, self.var_desc)
+            #print(col_name, self.var_desc[col_name]["bounds"], self.var_desc[col_name]["bounds"][0][0], self.var_desc[col_name]["bounds"][-1][1])
             start = self.var_desc[col_name]["bounds"][0][0]
             end = self.var_desc[col_name]["bounds"][-1][1]
 
@@ -34,79 +29,54 @@ class Data(object):
 
         self.df.index = range(0, len(self.df.index))
 
-    def __iter__(self):
 
-        self.iter_var = 0
+    def split_generator(self):
 
-        if self.var_desc[self.input_vars[self.iter_var]]["method"] == "classic":
-            if self.var_desc[self.input_vars[self.iter_var]]["type"] == "cir" and self.var_desc[self.input_vars[self.iter_var]]["bounds"] == [[-np.inf, np.inf]]:
-                self.iter_i = [0, 0]
-            else:
-                self.iter_i = [None, 0]
-        elif self.var_desc[self.input_vars[self.iter_var]]["method"] == "subset":
-            self.iter_i = [0, 0]
-        else:
-            raise Exception("Method not recognised.")
+        for var in list(self.var_desc.keys()):
 
-        self.sort_by(self.input_vars[self.iter_var])
-        self.iter_idx = np.where(self.df[self.input_vars[self.iter_var]].values[:-1] !=
-                                 self.df[self.input_vars[self.iter_var]].values[1:])[0] + 1
-
-        return self
-
-    def __next__(self):
-        found = False
-
-        while not found:
-            self.iter_i[1] += 1
-
-            # == modified to >=
-            # if sequence is all constant self.iter_i[1] == 1 doesn't match len(self.iter_idx) == 0
-            if self.iter_i[1] >= len(self.iter_idx):
-                if self.iter_i[0] is None or self.iter_i[0] >= len(self.iter_idx)-1:
-                    if self.iter_var < len(self.input_vars):
-                        self.iter_var += 1
-                        if self.iter_var == len(self.input_vars):
-                            raise StopIteration
-                        else:
-                            if self.var_desc[self.input_vars[self.iter_var]]["method"] == "classic":
-                                if self.var_desc[self.input_vars[self.iter_var]]["type"] == "cir" and self.var_desc[self.input_vars[self.iter_var]]["bounds"] == [[-np.inf, np.inf]]:
-                                    self.iter_i = [0, 0]
-                                else:
-                                    self.iter_i = [None, 0]
-                            elif self.var_desc[self.input_vars[self.iter_var]]["method"] == "subset":
-                                self.iter_i = [0, 0]
-                            self.sort_by(self.input_vars[self.iter_var])
-                            self.iter_idx = np.where(self.df[self.input_vars[self.iter_var]].values[:-1] !=
-                                                     self.df[self.input_vars[self.iter_var]].values[1:])[0] + 1
+            if self.var_desc[var]["method"] == "classic":
+                if self.var_desc[var]["type"] == "cir" and self.var_desc[var]["bounds"] == [[-np.inf, np.inf]]:
+                    iter_i = [0, 0]
                 else:
-                    self.iter_i[0] += 1
-                    self.iter_i[1] = self.iter_i[0]
-                    self.iter_idx = np.where(self.df[self.input_vars[self.iter_var]].values[:-1] !=
-                                             self.df[self.input_vars[self.iter_var]].values[1:])[0] + 1
-
+                    iter_i = [None, 0]
+            elif self.var_desc[var]["method"] == "subset":
+                iter_i = [0, 0]
             else:
-                found = True
+                raise Exception("Method not recognised.")
 
-        if self.iter_i[0] is None:
-            return (self.iter_var, [None, self.iter_idx[self.iter_i[1]]],
-                    self.df.iloc[:self.iter_idx[self.iter_i[1]]][self.class_var].values,
-                    self.df.iloc[self.iter_idx[self.iter_i[1]]:][self.class_var].values)
-        else:
-            return (self.iter_var, [self.iter_idx[self.iter_i[0]], self.iter_idx[self.iter_i[1]]],
-                    self.df.iloc[self.iter_idx[self.iter_i[0]]:self.iter_idx[self.iter_i[1]]][self.class_var].values,
-                    np.concatenate((self.df.iloc[:self.iter_idx[self.iter_i[0]]][self.class_var].values,
-                                    self.df.iloc[self.iter_idx[self.iter_i[1]]:][self.class_var].values)))
+            self.sort_by(var)
+            iter_idx = np.where(self.df[var].values[:-1] != self.df[var].values[1:])[0] + 1
+
+            # Otherwise all the values are the same and it is not possible to split
+            if iter_idx.shape[0] > 1:
+                #print(iter_idx.shape[0])
+
+                iter_idx = np.insert(iter_idx, 0, 0)
+                iter_idx = np.insert(iter_idx, iter_idx.shape[0], len(self.df.index)-1)
+
+                if iter_i[0] is None:
+                    for idx in iter_idx[1:-1]:
+                        yield (var, [None, idx],
+                               self.df.iloc[:idx][self.class_var].values,
+                               self.df.iloc[idx:][self.class_var].values)
+
+                else:
+                    for idx0 in iter_idx:
+                        for idx1 in iter_idx[1:-1]:
+                            if idx1 > idx0 and (idx0 != 0 or idx1 != len(self.df.index)-1):
+                                yield (var, [idx0, idx1],
+                                       self.df.iloc[idx0:idx1][self.class_var].values,
+                                       np.concatenate((self.df.iloc[:idx0][self.class_var].values,
+                                                       self.df.iloc[idx1:][self.class_var].values)))
 
     def get_best_split(self):
         best_split = {'var_name': None, 'score': 0.0, 'index': [None, 0]}
 
-        for (var_i, i, left, right) in self:
-            #print(self.input_vars[var_i])
+        for (var_name, i, left, right) in self.split_generator():
             score = get_score(left, right)
             if score > best_split['score']:
-                best_split.update({'var_name': self.input_vars[var_i], 'score': score, 'index': i[:]})
+                best_split.update({'var_name': var_name, 'score': score, 'index': i[:]})
 
-        #print(best_split)
+        print(best_split, self.df.iloc[i[1]][best_split["var_name"]], self.var_desc[best_split["var_name"]]["bounds"])
 
         return best_split

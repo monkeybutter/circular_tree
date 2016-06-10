@@ -39,20 +39,12 @@ class Node(object):
                 self.split_var = split["var_name"]
                 self.data.sort_by(self.split_var)
 
-                """
-                for value in self.data.df[split["var_name"]].values:
-                    if not is_in_bounds(self.data.var_desc[split["var_name"]]["bounds"], value):
-                        raise Exception("Problem start")
-
-
-                if split["var_name"] == 'gfs_wind_dir' and split["index"] == [113, 158]:
-                    print("Watchout!", split)
-                """
-
                 outer_bounds, inner_bounds = bound_generator(self.data.df[split["var_name"]].values,
                                                              split['index'],
                                                              self.data.var_desc[split["var_name"]]["bounds"],
                                                              self.data.var_desc[split["var_name"]]['type'] == 'cir')
+
+                print(outer_bounds, inner_bounds)
 
                 left_desc = copy.deepcopy(self.data.var_desc)
                 left_desc[split["var_name"]]["bounds"] = inner_bounds
@@ -80,31 +72,6 @@ class Node(object):
                                                  self.data.class_var, right_desc),
                                             self.stop, self.variance, self.level+1)
 
-                """
-                for value in self.left_child.data.df[split["var_name"]].values:
-                    if not is_in_bounds(self.left_child.data.var_desc[split["var_name"]]["bounds"], value):
-                        print(self.data.var_desc[split["var_name"]]["bounds"])
-                        print(self.data.df[split["var_name"]].values)
-                        print()
-                        print(split['index'], self.data.df.iloc[split['index'][0]][split["var_name"]],
-                              self.data.df.iloc[split['index'][1]][split["var_name"]])
-                        print()
-                        print(self.left_child.data.var_desc[split["var_name"]]["bounds"])
-                        print(self.left_child.data.df[split["var_name"]].values)
-                        print()
-                        print(self.right_child.data.var_desc[split["var_name"]]["bounds"])
-                        print(self.right_child.data.df[split["var_name"]].values)
-
-                        import time
-                        time.sleep(.1)
-                        raise Exception("Left prob end")
-
-                for value in self.right_child.data.df[split["var_name"]].values:
-                    if not is_in_bounds(self.right_child.data.var_desc[split["var_name"]]["bounds"], value):
-                        print(self.right_child.data.var_desc[split["var_name"]]["bounds"])
-                        print(self.right_child.data.df[split["var_name"]].values)
-                        raise Exception("Right prob end")
-                """
 
                 self.left_child.split()
                 self.right_child.split()

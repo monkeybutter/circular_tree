@@ -80,6 +80,7 @@ def bound_generator(data, index, bounds, circular):
             return [[data[index[1]], bounds[0][1]]], [[bounds[0][0], data[index[1]]]]
 
         else:
+            #print("Lund Bounds:", bounds)
             outter = []
             inner = []
             for bound in bounds:
@@ -140,6 +141,7 @@ def bound_generator(data, index, bounds, circular):
 
             #print("C Output <-", outter, inner)
             #print("C Output <-", bound_bonder(outter), bound_bonder(inner))
+
             return bound_bonder(outter), bound_bonder(inner)
 
     else:
