@@ -44,7 +44,7 @@ class Node(object):
                                                              self.data.var_desc[split["var_name"]]["bounds"],
                                                              self.data.var_desc[split["var_name"]]['type'] == 'cir')
 
-                print(outer_bounds, inner_bounds)
+                #print(outer_bounds, inner_bounds)
 
                 left_desc = copy.deepcopy(self.data.var_desc)
                 left_desc[split["var_name"]]["bounds"] = inner_bounds

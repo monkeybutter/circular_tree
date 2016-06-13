@@ -202,6 +202,8 @@ def cxval_test(df, class_var, var_desc, leaf_size, variance=0.25, k_folds=5, see
         train_df, test_df = cxval_select_fold(i, df_folds)
         tree = tree_planter(train_df, class_var, var_desc, leaf_size, variance)
 
+        #tree_pprinter(tree)
+
         mae_results.append(tree_mae_calc(tree, test_df))
         rmse_results.append(tree_rmse_calc(tree, test_df))
 

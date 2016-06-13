@@ -48,26 +48,29 @@ class Data(object):
             iter_idx = np.where(self.df[var].values[:-1] != self.df[var].values[1:])[0] + 1
 
             # Otherwise all the values are the same and it is not possible to split
-            if iter_idx.shape[0] > 1:
+            if iter_idx.shape[0] > 2:
                 #print(iter_idx.shape[0])
 
                 iter_idx = np.insert(iter_idx, 0, 0)
                 iter_idx = np.insert(iter_idx, iter_idx.shape[0], len(self.df.index)-1)
 
                 if iter_i[0] is None:
-                    for idx in iter_idx[1:-1]:
+                    for idx in iter_idx[2:-2]:
                         yield (var, [None, idx],
                                self.df.iloc[:idx][self.class_var].values,
                                self.df.iloc[idx:][self.class_var].values)
 
                 else:
-                    for idx0 in iter_idx:
-                        for idx1 in iter_idx[1:-1]:
-                            if idx1 > idx0 and (idx0 != 0 or idx1 != len(self.df.index)-1):
-                                yield (var, [idx0, idx1],
-                                       self.df.iloc[idx0:idx1][self.class_var].values,
-                                       np.concatenate((self.df.iloc[:idx0][self.class_var].values,
-                                                       self.df.iloc[idx1:][self.class_var].values)))
+
+                    for i in range(iter_idx.shape[0]):
+                        for j in range(i+2, iter_idx.shape[0]-1):
+                            if (i-j) % iter_idx.shape[0]-1 > 1:
+                                yield (var, [iter_idx[i], iter_idx[j]],
+                                       self.df.iloc[iter_idx[i]:iter_idx[j]][self.class_var].values,
+                                       np.concatenate((self.df.iloc[:iter_idx[i]][self.class_var].values,
+                                                       self.df.iloc[iter_idx[j]:][self.class_var].values)))
+
+
 
     def get_best_split(self):
         best_split = {'var_name': None, 'score': 0.0, 'index': [None, 0]}
@@ -77,6 +80,6 @@ class Data(object):
             if score > best_split['score']:
                 best_split.update({'var_name': var_name, 'score': score, 'index': i[:]})
 
-        print(best_split, self.df.iloc[i[1]][best_split["var_name"]], self.var_desc[best_split["var_name"]]["bounds"])
+        #print(best_split, self.df.iloc[i[1]][best_split["var_name"]], self.var_desc[best_split["var_name"]]["bounds"])
 
         return best_split
