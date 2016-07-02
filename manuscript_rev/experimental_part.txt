@@ -12,39 +12,24 @@ The hypothesis of this study is that our proposed methodology for generating cir
 
 In order to prove the previous statement, a general version of regression tree is implemented where each of the input variables can be tagged as \{"linear", "circular"\} and \{"contiguous", "non-contiguous"\}. These two tags indicate the kind of data and split methodology to be applied when computing the tree respectively. Different values of these tags will characterise the different versions of regression trees. 
 
-This tree implementation offers an input parameter called 'maximum leaf size', which is used as the stop criterion to mark the end of the splitting process. Large values of the 'maximum leaf size' produce shallow trees with a few number of partitions and levels. On the other hand, small values of this parameter generate deep trees whith a large number of partitions and levels. To evaluate the differences in accuracy between each methodology, a 5-fold cross validation process is used. The accuracy of a tree is measured by computing the root mean squared error (RMSE) comparing the value of the class variable of a row and the mean of the members contained in the corresponding child node of the tree. To avoid differences in the results caused by considering different partitions during the validation process, the same partition is used to test the three methodologies each time.
+The stop criterium for all trees is based on the number of elements in a node. Splits are performed recursively until the number of data entries in a node falls below a certain value. Then, the splitting process is stopped and the node is denoted as leaf. This parameter receives the name of ”maximum leaf size”. Large values of ”maximum leaf size” generate shallow trees, whereas small values will generate deep trees with a large number of partitions. The tree implementation used to perform these experiments offers 'maximum leaf size' as one of its input parameters.
 
-Fully grown trees may lose some generalization capabilities, which is also known as overfitting. [Kotsiantis, S Artif Intell Rev (2013) 39: 261.] Comparing the RMSE accuracy levels at different depth or levels of partition provides insight on the quality of the partitions and allows detecting when accuracy starts to degrading. Using the data sets described above, we measure RMSE and CPU time to complete for the different tree versions and for a range of 'maximum leaf size' values.
+To evaluate the differences in accuracy between each of these tree methodologies, a 5-fold cross validation procedure is used. The accuracy of each tree is measured by computing the root mean squared error (RMSE) of the class variable in each row compared to the mean of the members contained in the corresponding child node of the tree. To avoid differences in the results caused by considering different partitions during the validation process, the same partition is used to test all three methodologies.
+
+Fully grown trees may lose some generalization capabilities, which is also known as overfitting. [Kotsiantis, S Artif Intell Rev (2013) 39: 261.] Comparing the RMSE accuracy levels at different depths provides insight on the quality of the partitions and allows detecting when accuracy starts degrading. It is considered a good characteristic of trees to produce good partitions at any level. Regression trees are a versatile algorithm which can be applied to many different problems and data sets, therefore they should provide the best possible accuracy at any depth level.
+
+Using the data sets described above, we measure RMSE and CPU time to grow a tree, for the different versions and for a range of 'maximum leaf size' values.
 
 \subsection{Orbital variations data set}
 
 The Orbital Variations and Insolation Database contains the values of the eccentricity, obliquity and orbital precession of the earth for the last 5 million years. Each of these parameters completes a cycle with a fixed period and the position of the earth at any particular moment is determined by the combination of all three. The earth takes around 41.000 years to complete an obliquity cycle and 26.000 year to complete a precession one. Extracting the angle phases of these two parameters and considering them as circular variables, we try to predict the values of solar radiance at 65 degrees north of latitude in July, parameter also contained in the data set.
 
-The whole data set contains around 3300 !!!!MAKE IT 3300!!! and the 'maximum leaf size' values of 2500, 1250, 500 and 250 are used to generate different versions of each tree.  rows and a 5-fold cross validation is used to predict solar radiance values at different depths of the tree. 
-
-\begin{table*}[t]
-\caption{RMSE in predicting the observed METAR wind speed and CPU time for the different airports using the different versions of regression trees.}\label{t4}
-\begin{center}
-\begin{tabular}{ccrrrrrr}
-\hline\hline
-$Airport$ & $Tree\ Version$ & \multicolumn{6}{|c|}{Max Leaf Size}\\
-$$ & $$ & \multicolumn{2}{|c|}{2500} & \multicolumn{2}{|c|}{1250} & \multicolumn{2}{|c|}{500} & \multicolumn{2}{|c|}{250}\\
-$$ & $$ & $RMSE$ & $CPU(s)$ & $RMSE$ & $CPU(s)$ & $RMSE$ & $CPU(s) & $RMSE$ & $CPU(s) $\\
-\hline
-65°N Radiation & Linear & 0.913 & 16 & 0.833 & 27 & 0.357 & 39 & 0.220 & 39\\
-65°N Radiation & Proposed & 0.620 & 23 & 0.372 & 36 & 0.233 & 53 & 0.216 & 39\\
-65°N Radiation & Lund's & 0.620 & 34 & 0.389 & 50 & 0.3577 & 71 & 0.340 & 39\\
-\hline
-\end{tabular}
-\end{center}
-\end{table*}
- 
 \begin{table*}[t]
 \caption{Tagged input variables for the different versions of regression trees.}\label{t3}
 \begin{center}
 \begin{tabular}{llllll}
 \hline\hline
-$Name$ & \multicolumn{4}{c}{Input Variables} \\ \hline
+$Name$ & \multicolumn{2}{c}{Input Variables} \\ \hline
  & $Precession$ & $Obliquity$ \\
 \hline
 Linear Contiguous & lin, con & lin, con\\
@@ -55,7 +40,26 @@ Circular Non-Contiguous & cir, non-con & cir, non-con\\
 \end{center}
 \end{table*}
 
+The precession and obliquity phases are used as the input variables in the different modalities shown in Table \ref{t3}. Each tree generates splits on the dataset based on these two variables to predict solar radiation values. The whole data set contains around 3300 !!!!MAKE IT 3300!!! and the "maximum leaf size" values used to generate the different versions of each tree are: 2500, 1250, 500 and 250.
 
+\begin{table*}[t]
+\caption{RMSE in predicting Radiation Levels at 65°N and CPU time to complete for the different 'max leaf size' values and versions of regression trees.}\label{t4}
+\begin{center}
+\begin{tabular}{ccrrrrrr}
+\hline\hline
+$Tree\ Version$ & \multicolumn{8}{|c|}{Max Leaf Size}\\
+$$ & \multicolumn{2}{|c|}{2500} & \multicolumn{2}{|c|}{1250} & \multicolumn{2}{|c|}{500} & \multicolumn{2}{|c|}{250}\\
+$$ & $RMSE$ & $CPU(s)$ & $RMSE$ & $CPU(s)$ & $RMSE$ & $CPU(s) & $RMSE$ & $CPU(s) $\\
+\hline
+Linear & 0.913 & 16 & 0.833 & 27 & 0.357 & 39 & 0.220 & 39\\
+Proposed & 0.620 & 23 & 0.372 & 36 & 0.233 & 53 & 0.216 & 39\\
+Lund's & 0.620 & 34 & 0.389 & 50 & 0.3577 & 71 & 0.340 & 39\\
+\hline
+\end{tabular}
+\end{center}
+\end{table*}
+ 
+Table \ref{t4} contains the resulting RMSE values and CPU times for each tree.
 \subsection{Airports meteorology data set}
 
 \begin{table*}[t]
@@ -113,7 +117,7 @@ To evaluate the differences in accuracy between each of these tree methodologies
 
 The error in forecasting a single value is defined as the difference between the temperature predicted by the tree, which is the mean of the target values contained in the selected leaf, and the observed METAR temperature value. At the end of the cross validation process, the Root Mean Square Error (RMSE) is calculated for each tree and airport.
 
-
+This tree implementation offers an input parameter called 'maximum leaf size', which is used as the stop criterion to mark the end of the splitting process. Large values of the 'maximum leaf size' produce shallow trees with a few number of partitions and levels. On the other hand, small values of this parameter generate deep trees whith a large number of partitions and levels. To evaluate the differences in accuracy between each methodology, a 5-fold cross validation process is used. The accuracy of a tree is measured by computing the root mean squared error (RMSE) comparing the value of the class variable of a row and the mean of the members contained in the corresponding child node of the tree. To avoid differences in the results caused by considering different partitions during the validation process, the same partition is used to test the three methodologies each time.
 \subsection{Experimental Results}
 \label{sec:4.3}
 

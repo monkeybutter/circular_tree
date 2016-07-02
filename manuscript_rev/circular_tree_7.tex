@@ -424,6 +424,50 @@ The accuracy of a tree's results depends on how well the partitioned space repre
 
 \subsection{Data sets}
 
+To compare the differences in accuracy between the previously discussed methods, we perform a series of experiments based on two data sets which contain circular variables. The first data set, comes from the Orbital Variations and Insolation Database \citep{Berger1991}. It contains data on changes in the earth's orbital parameters, and the resulting variations in insolation. The movements described by these parameters are commonly known as the Milankovitch cycles \citep{Hays1976}. The second data set contains meteorological data for several airports in Europe. This data set has been assembled combining numerical simulated data from the Global Forecast System model (GFS) \citep{CampanaCaplan2005} and observational data from Meteorological Aerodrome Reports (METAR) \citep{WMO1995}.
+
+These two data sets are used to compare the differences in accuracy and and computational efficiency for the three regression methodologies discussed in this manuscript: linear, circular contiguous and circular non-contiguous trees. Each of these methodologies is used to partition each data set when predicting one of its variables. The errors and the compute times of the different trees are measured at different depths tree to compare their accuracy and computational efficiency.
+
+\subsection{Experiment Description}
+
+The hypothesis of this study is that our proposed methodology for generating circular regression trees provides better accuracy at any depth level than both the classic linear regression tree and the previous proposal of circular regression trees. Further, since our methodology splits circular variables into contiguous regions, the search space is substantially reduced and the compute times are reduced significantly than Lund's proposal of circular tree.
+
+In order to prove the previous statement, a general version of regression tree is implemented where each of the input variables can be tagged as \{"linear", "circular"\} and \{"contiguous", "non-contiguous"\}. These two tags indicate the kind of data and split methodology to be applied when computing the tree respectively. Classic regression trees are characterised by the pair of tags ["linear", "contiguous"], Lund's methodology by ["circular", "non-contiguous"] and our proposed methodology by ["circular", "contiguous"].
+
+The stop criterium for all trees is based on the number of elements in a node. Splits are performed recursively until the number of data entries in a node falls below a certain value. Then, the splitting process is stopped and the node is denoted as leaf. This parameter receives the name of ”maximum leaf size”. Large values of ”maximum leaf size” generate shallow trees, whereas small values will generate deep trees with a large number of partitions. The tree implementation used to perform these experiments offers 'maximum leaf size' as one of its input parameters.
+
+To evaluate the differences in accuracy between each of these tree methodologies, a 5-fold cross validation procedure is used. The accuracy of each tree is measured by computing the root mean squared error (RMSE) of the class variable in each row compared to the mean of the members contained in the corresponding child node of the tree. To avoid differences in the results caused by considering different partitions during the validation process, the same partition is used to test all three methodologies.
+
+Fully grown trees may lose some generalisation capabilities, which is also known as overfitting. \citep{Kotsiantis2013} Comparing the RMSE accuracy levels at different depths provides insight on the quality of the partitions and allows detecting when accuracy starts degrading. It is considered a good characteristic of trees to produce good partitions at any level. Regression trees are a versatile algorithm which can be applied to many different problems and data sets, therefore they should provide the best possible accuracy at any depth level.
+
+Using the data sets described above, we measure RMSE and CPU time to grow a tree, for the different versions and for a range of "maximum leaf size" values.
+
+\subsection{Orbital variations data set}
+The Orbital Variations and Insolation Database contains the values of the eccentricity, obliquity and orbital precession of the earth for the last 5 million years. Each of these parameters completes a cycle with a fixed period and the position of the earth at any particular moment is determined by the combination of all three. The earth takes around 41.000 years to complete an obliquity cycle and 26.000 year to complete a precession one. Extracting the angle phases of these two parameters and considering them as circular variables, we try to predict the values of solar radiance at 65 degrees north of latitude in July, parameter also contained in the data set.
+
+The precession and obliquity phases are used as the input variables. Each tree generates splits on the dataset based on these two variables to predict solar radiation values. The whole data set contains around 3300 and the "maximum leaf size" values used to generate the different versions of each tree are: 2500, 1250, 500 and 250.
+
+\begin{table*}[t]
+\caption{RMSE in predicting Radiation Levels at 65°N and CPU time to complete for the different 'max leaf size' values and versions of regression trees.}\label{t4}
+\begin{center}
+\begin{tabular}{crrrrrrrr}
+\hline\hline
+$Tree\ Version$ & \multicolumn{8}{|c|}{Max Leaf Size}\\
+$$ & \multicolumn{2}{|c|}{2500} & \multicolumn{2}{|c|}{1250} & \multicolumn{2}{|c|}{500} & \multicolumn{2}{|c|}{250}\\
+$$ & $RMSE$ & $CPU(s)$ & $RMSE$ & $CPU(s)$ & $RMSE$ & $CPU(s)$ & $RMSE$ & $CPU(s) $\\
+\hline
+Linear & 0.913 & 16 & 0.833 & 27 & 0.357 & 39 & 0.230 & 39\\
+Proposed & 0.620 & 23 & 0.372 & 36 & 0.233 & 53 & 0.206 & 39\\
+Lund's & 0.620 & 34 & 0.389 & 50 & 0.357 & 71 & 0.340 & 39\\
+\hline
+\end{tabular}
+\end{center}
+\end{table*}
+
+Table \ref{t4} contains the resulting RMSE values and CPU times for each tree.
+
+\subsection{Airports meteorology data set}
+
 The weather provides an excellent source of data for testing different machine learning algorithms. Weather data sets usually contain several variables which can be characterised as circular, such as wind direction or time and date. Observational data collected by weather agencies comply with the highest quality standards and are freely available on the Internet.
 
 To compare the differences between the previously discussed methods, we use meteorological data sets corresponding to seven different airports. These data sets contain a combination of modeled data from the Global Forecast System model (GFS) \citep{CampanaCaplan2005} and observational data from Meteorological Aerodrome Reports (METAR) \citep{WMO1995}.
