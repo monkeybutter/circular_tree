@@ -264,7 +264,7 @@ Regression trees have been a popular and effective technique in forecasting line
 This paper is structured as follows: Section 2 contains a detailed description of different ways of generating regression trees for linear and circular variables. The section ends with a comparison between the original and proposed methodology for building circular regression trees. Section 3 contains a series of experiments that compare efficiency and accuracy figures for classic linear regression trees and both versions of circular regression trees. Section 4 contains the conclusions and proposes further lines of investigation.
 
 
-\section{Circular Regression Trees}
+\section{Circular regression trees}
 
 A circular variable is a numerical variable whose values are constrained into a cyclical space, for example, a variable measuring angles in radians, spans between 0 and 2$ \pi $, where both values represent the same point in space. 
 
@@ -278,7 +278,7 @@ Lund bases his argument on the lack of meaning that '$<$' and '$>$' operators ha
 
 This approach succeeds in incorporating circular variables to regression trees, but requires a higher computational cost to generate the tree and also poses some challenges in the way it creates variable splits. In the following sections, circular regression trees will be discussed and a new way of building regression trees combining linear and circular variables will be proposed. The next subsection explores the differences and effects that the use of these two sets of operators have on classic linear regression trees. Later, the concept of circular regression tree will be introduced. Lund's proposal will be compared with the proposed new methodology to build circular regression trees. The third and last subsection discusses the differences between Lund's and our methodology, comparing their efficiency and the accuracy of the results.
 
-\subsection{Building Linear Regression Trees}
+\subsection{Building linear regression trees}
 
 Regression trees, as presented by \citep{Breimanetal1984}, are built from a learning sample of observations. Let us consider a sample of observations $\mathcal{L}$ of linear variables $ X_1, X_2, \dots, X_n $ as a set of vectors $\bf{x} $ $= (x_1, x_2, \dots, x_n)$. In regression, a case consists of data $(\bf{x},$ $y)$ where $\bf{x}$ denotes measurement vectors, and $ y $ refers to the response or dependent variable. The measurement space $\mathcal{X}$ contains all possible measurement vectors. Each measurement vector in the observations sample can be represented as a point in the defined measurement space of dimension $n$. Different methods of regression analysis provide different functions $d(\bf{x})$, to estimate a value of the response variable $y$.
 
@@ -317,7 +317,7 @@ Although CART provides a methodology to easily divide the measurement space at t
 
 The most noticeable difference between the last two figures is that the resulting regions defined by the tree are spatially contiguous in Figure 1 whereas some of the equivalent regions appear as non-contiguous in Figure \ref{f2}. This new way of dividing the space requires finding a range of values within the variable’s space. The split is determined by whether values belong to that range. Finding a range instead of a value is also a perfectly valid proposal, but has computational implications, which will be discussed in Section 3.3, and depending on the data set, it can also have a negative impact on the accuracy of the resulting tree.
 
-\subsection{Building Circular Regression Trees}
+\subsection{Building circular regression trees}
 
 This section considers how circular variables can be assimilated by regression trees. Lund's proposition to introduce ranges, solves the problem of univocally defining a region within a circular space. If $\alpha$ is a circular variable defined in $[0, 2\pi]$, a range within that variable can be determined by $arc(\alpha_1, \alpha_2)$. The '$\in$' and '$\notin$' operators are used to designate two regions of the circular space that belong and do not belong to that range, respectively. These two regions represent two complementary and non-overlapping regions in the circular space.
 
@@ -420,7 +420,7 @@ Our proposed methodology for building circular trees generates only contiguous r
 The accuracy of a tree's results depends on how well the partitioned space represents the correlations between its variables. As was pointed out in the previous section, non-contiguous splits provide more options to partition the space, improving the chances of finding a better partition. Regression trees use a greedy algorithm in which each node selects the best split individually, without considering how the split generalises for subsequent splits. A tree selects a non-contiguous split at one of its nodes because the correlation between the values of the considered variable is higher than any of the contiguous splits. How non-contiguous splits can generalise along a tree highly depends on the data set and the relationships between its variables.
 
 
-\section{Experimental Evaluation}
+\section{Experimental evaluation}
 
 \subsection{Data sets}
 
@@ -428,7 +428,7 @@ To compare the differences in accuracy between the previously discussed methods,
 
 These two data sets are used to compare the differences in accuracy and and computational efficiency for the three regression methodologies discussed in this manuscript: linear, circular contiguous and circular non-contiguous trees. Each of these methodologies is used to partition each data set when predicting one of its variables. The errors and the compute times of the different trees are measured at different depths tree to compare their accuracy and computational efficiency.
 
-\subsection{Experiment Description}
+\subsection{Experiment description}
 
 The hypothesis of this study is that our proposed methodology for generating circular regression trees provides better accuracy at any depth level than both the classic linear regression tree and the previous proposal of circular regression trees. Further, since our methodology splits circular variables into contiguous regions, the search space is substantially reduced and the compute times are reduced significantly than Lund's proposal of circular tree.
 
@@ -445,7 +445,7 @@ Using the data sets described above, we measure RMSE and CPU time to grow a tree
 \subsection{Orbital variations data set}
 The Orbital Variations and Insolation Database contains the values of the eccentricity, obliquity and orbital precession of the earth for the last 5 million years. Each of these parameters completes a cycle with a fixed period and the position of the earth at any particular moment is determined by the combination of all three. The earth takes around 41.000 years to complete an obliquity cycle and 26.000 year to complete a precession one. Extracting the angle phases of these two parameters and considering them as circular variables, we try to predict the values of solar radiance at 65 degrees north of latitude in July, parameter also contained in the data set.
 
-The precession and obliquity phases are used as the input variables. Each tree generates splits on the dataset based on these two variables to predict solar radiation values. The whole data set contains around 3300 and the "maximum leaf size" values used to generate the different versions of each tree are: 2500, 1250, 500 and 250.
+Precession and obliquity phases are used as input variables. Each tree generates splits on the dataset based on these two variables to predict solar radiation values. The whole data set contains around 3300 roes and the "maximum leaf size" values used to generate the different versions of each tree are: 2500, 1250, 500 and 250.
 
 \begin{table*}[t]
 \caption{RMSE in predicting Radiation Levels at 65°N and CPU time to complete for the different 'max leaf size' values and versions of regression trees.}\label{t4}
@@ -454,107 +454,88 @@ The precession and obliquity phases are used as the input variables. Each tree g
 \hline\hline
 $Tree\ Version$ & \multicolumn{8}{|c|}{Max Leaf Size}\\
 $$ & \multicolumn{2}{|c|}{2500} & \multicolumn{2}{|c|}{1250} & \multicolumn{2}{|c|}{500} & \multicolumn{2}{|c|}{250}\\
-$$ & $RMSE$ & $CPU(s)$ & $RMSE$ & $CPU(s)$ & $RMSE$ & $CPU(s)$ & $RMSE$ & $CPU(s) $\\
+$$ & $RMSE$ & $T$ & $RMSE$ & $T$ & $RMSE$ & $T$ & $RMSE$ & $T $\\
 \hline
-Linear & 0.913 & 16 & 0.833 & 27 & 0.357 & 39 & 0.230 & 39\\
-Proposed & 0.620 & 23 & 0.372 & 36 & 0.233 & 53 & 0.206 & 39\\
-Lund's & 0.620 & 34 & 0.389 & 50 & 0.357 & 71 & 0.340 & 39\\
-\hline
-\end{tabular}
-\end{center}
-\end{table*}
-
-Table \ref{t4} contains the resulting RMSE values and CPU times for each tree.
-
-\subsection{Airports meteorology data set}
-
-The weather provides an excellent source of data for testing different machine learning algorithms. Weather data sets usually contain several variables which can be characterised as circular, such as wind direction or time and date. Observational data collected by weather agencies comply with the highest quality standards and are freely available on the Internet.
-
-To compare the differences between the previously discussed methods, we use meteorological data sets corresponding to seven different airports. These data sets contain a combination of modeled data from the Global Forecast System model (GFS) \citep{CampanaCaplan2005} and observational data from Meteorological Aerodrome Reports (METAR) \citep{WMO1995}.
-
-Combining the data from GFS and METARs, seven data sets are produced, containing different forecasted and observed weather variables for the airports of London (EGLL), Berlin (EDDT), Barcelona (LEBL), Paris (LFPG), Milano (LIMC), Beijing (ZBAA) and Sydney (YSSY). Three hourly data is collected for the years 2011, 2012 and 2013, giving approximately 8760 samples per airport. The variables contained in these data sets are: 2 metres temperature from the METAR reports and 2 metres relative humidity, 10 metres wind speed from the GFS model. Every row in the data set has a timestamp with date and time of the values. The variables Date and Time are transformed into their angular numerical values so that they can be used as circular variables.
-
-Using statistical methods to improve numerical weather models accuracy based on observational data is a common practice and represents an active area of research \citep{Larraondoetal2014, Salamehetal2009}. Weather models usually contain many parameters represented as circular variables, making them ideal to test these methods. However, the proposed methodology can be applied to any data set containing circular variables. 
-
-\subsection{Experiment Description}
-
-The hypothesis of this study is that our proposed methodology for generating circular regression trees provides better computational efficiency and accuracy than earlier proposals. Further, since this methodology allows circular variables to be split at any region of the space, it provides more accurate results than the classic linear regression tree.
-
-In order to prove the previous statement, a general version of regression tree is implemented where each of the input variables can be tagged as \{"linear", "circular"\} and \{"contiguous", "non-contiguous"\}. These tags indicate the kind of data and split methodology to be applied when computing. Different values of these tags indicate different versions of regression trees.
-
-A set of experiments is carried out to compare the computational efficiency and accuracy of these three versions of regression trees. Using the data sets described above, observed METAR temperature is considered as the target variable and the rest of the variables are the input variables. The classical linear version considers all the input variables to be linear. The circular versions consider Date and Time as circular variables and the rest of the input variables as linear. 
-
-The stop criterium for all trees is based on the number of elements in a node. Splits are recursively performed until the number of data entries in a node falls below a certain value. Then, the splitting process is stopped and the node is denoted as leaf. This value receives the name of ”maximum leaf size”. Large values of ”maximum leaf size” generate shallow trees, whereas small values generate deep trees. Each version of the considered trees is evaluated using three maximum leaf sizes: 250, 100 and 50.
-
-To evaluate the differences in accuracy between these tree methodologies, a 5-fold cross validation procedure is used. To avoid differences in the results caused by different partitions in the validation process, the same 5-fold partition is used to validate the three methodologies for the different values of the ”maximum leaf size” parameter.
-
-The error forecasting a single value is defined as the difference between the temperature predicted by the tree, which is the mean of the target values contained in the selected leaf, and the observed METAR temperature value. At the end of the cross validation process, the Root Mean Square Error (RMSE) is calculated for each tree and airport.
-
-
-\subsection{Experimental Results}
-\label{sec:4.3}
-
-This section contains the results of the experiments described in the previous section.
-It is worth mentioning that execution times are highly dependent on the architecture of the computer executing the code. The CPU times represented in Table \ref{t4} correspond to a desktop with a 3.2 GHz Intel Core i3 processor. The ratios between CPU times for the different experiments should be in the same order, regardless of the execution environment.
-
-Table \ref{t4} shows the accuracy, measured using RMSE, and the efficiency, measured in CPU seconds, for the different trees, leaf sizes and airports. The accuracy results can be better interpreted when represented as a series of plots.
-
-Figure \ref{f6} contains a graphical representation of the RMSE values for the three methodologies and three leaf sizes for one of the airports. The RMSE results show that the highest accuracy for every airport is achieved by the proposed version of circular tree. To statistically compare the results of the different algorithms each leaf size is considered as a different experiment, to be validated independently. For each leaf size, we have the RMSE values for the seven airports and three methodologies. A non-parametric Friedman test is used to control the variability between methodologies. For each leaf size, the methodology proposed by \citep{Demsar2006} is used to assess the statistical significance of the differences between algorithms. The null hypothesis of similarity is rejected for each leaf size; this justifies the use of post-hoc bivariate tests (Nemenyi test, in our case), which assess the statistical difference between pairs of algorithms. The results of this test can be graphically expressed using Critical Difference (CD) diagrams.
-
-\begin{table*}[t]
-\caption{RMSE in predicting the observed METAR wind speed and CPU time for the different airports using the different versions of regression trees.}\label{t4}
-\begin{center}
-\begin{tabular}{ccrrrrrr}
-\hline\hline
-$Airport$ & $Tree\ Version$ & \multicolumn{6}{|c|}{Max Leaf Size}\\
-$$ & $$ & \multicolumn{2}{|c|}{50} & \multicolumn{2}{|c|}{100} & \multicolumn{2}{|c|}{250}\\
-$$ & $$ & $RMSE$ & $CPU(s)$ & $RMSE$ & $CPU(s)$ & $RMSE$ & $CPU(s)$\\
-\hline
-EDDT & Linear  & 3.844 & 16 & 3.868 & 27 & 4.013 & 39\\
-EDDT & Proposed & 3.822 & 23 & 3.854 & 36 & 3.981 & 53\\
-EDDT & Lund's & 3.994 & 34 & 3.989 & 50 & 4.055 & 71\\
-\hline
-EGLL & Linear  & 3.094 & 15 & 3.147 & 24 & 3.257 & 35\\
-EGLL & Proposed  & 3.053 & 22 & 3.083 & 35 & 3.241 &50\\
-EGLL & Lund's & 3.260 & 33 & 3.227 & 48 & 3.250 & 65\\
-\hline
-YSSY & Linear  & 2.634 & 16 & 2.625 & 22 & 2.670 & 29\\
-YSSY & Proposed  & 2.613 & 21 & 2.601 & 30 & 2.680 & 39\\
-YSSY & Lund's & 2.743 & 36 & 2.699 & 50 & 2.727 & 62\\
-\hline
-ZBAA & Linear  & 3.493 & 20 & 3.540 & 34 & 3.841 & 55\\
-ZBAA & Proposed  & 3.354 & 26 & 3.374 & 44 & 3.524 & 64\\
-ZBAA & Lund's & 3.843 & 32 & 3.851 & 54 & 3.864 & 80\\
-\hline
-LEBL & Linear  & 2.234 & 18 & 2.264 & 30 & 2.345 & 36\\
-LEBL & Proposed  & 2.202 & 25 & 2.232 & 41 & 2.316 & 52\\
-LEBL & Lund's & 2.561 & 31 & 2.525 & 46 & 2.521 & 61\\
-\hline
-LFPG & Linear  & 3.586 & 17 & 3.595 & 27 & 3.699 & 39\\
-LFPG & Proposed  & 3.545 & 24 & 3.567 & 38 & 3.691 & 54\\
-LFPG & Lund's & 3.843 & 33 & 3.794 & 48 & 3.766 & 63\\
-\hline
-LIMC & Linear  & 3.753 & 18 & 3.779 & 29 & 3.898 & 43\\
-LIMC & Proposed  & 3.883 & 24 & 3.749 & 39 & 3.765 & 58\\
-LIMC & Lund's & 3.865 & 30 & 3.819 & 48 & 3.848 & 66\\
+Linear & 0.913 & 1 & 0.833 & 2 & 0.357 & 2 & 0.230 & 3\\
+Proposed & 0.620 & 3 & 0.372 & 5 & 0.233 & 5 & 0.206 & 6\\
+Lund's & 0.620 & 3 & 0.389 & 7 & 0.357 & 9 & 0.340 & 14\\
 \hline
 \end{tabular}
 \end{center}
 \end{table*}
 
 \begin{figure}
-  %%\includegraphics[width=8cm]{berlin.png}
-  %%\includegraphics[width=8cm]{heathrow.png}
-  %%\includegraphics[width=8cm]{sydney.png}
-  %%\includegraphics[width=8cm]{beijing.png}
-  \includegraphics[width=8cm]{barcelona.png}
-  %%\includegraphics[width=8cm]{charles.png}
-  %%\includegraphics[width=8cm]{milano.png}
-\caption{RMSE values for the airport of Barcelona-El Prat comparing the accuracy of regression trees for different maximum leaf sizes.}
-\label{f6}
+  \includegraphics[width=8cm]{milankovitch_fig.png}
+  \caption{RMSE values in predicting solar radiation as a function of precession and obliquity phases and "maximum leaf size".}
+\label{f_tbn}
 \end{figure}
 
+Table \ref{t4} contains the resulting RMSE values and CPU times for each tree and Figure \ref{f_tbn} represents the evolution of the RMSE value as the size of the maximum leaf parameter is decreased.
+
+\subsection{Airports meteorology data set}
+
+The weather provides an excellent source of data for testing different machine learning algorithms. Weather data sets usually contain several variables which can be characterised as circular, such as wind direction or time and date. Using statistical methods to improve numerical weather models accuracy based on observational data is a common practice and represents an active area of research \citep{Larraondoetal2014, Salamehetal2009}.
+
+To compare the differences between the previously discussed methods, we use meteorological data sets corresponding to seven different airports. Combining the data from GFS and METARs, four data sets are produced, containing different forecasted and observed weather variables for the airports of Barcelona (LEBL), Beijing (ZBAA), Berlin (EDDT) and Paris (LFPG). Three hourly data is collected for the years 2011, 2012 and 2013, giving approximately 8760 samples per airport. The variables contained in these data sets are: 2 metres temperature from the METAR reports and 10 metres wind speed from the GFS model. Every row in the data set has a timestamp with date and time of the values. 
+
+Each tree generates partitions to predict observed METAR observed Temperature based on the input variables: 10 metres Wind Speed from the GFS model Date and Time. 
+The input variables Date and Time are transformed into their angular numerical values so that they can be used as circular variables. The following values of "maximum leaf size" are used as inputs to the tree generation process: 2500, 1000, 500, 250, 100, 50.
+
+\begin{table*}[t]
+\caption{RMSE in predicting the observed METAR wind speed and CPU time for the different airports using the different versions of regression trees.}\label{t5}
+\begin{center}
+\begin{tabular}{ccrrrrrrrrrrrr}
+\hline\hline
+$Airport$ & $Tree\ Version$ & \multicolumn{12}{|c|}{Max Leaf Size}\\
+$$ & $$ & \multicolumn{2}{|c|}{2500} & \multicolumn{2}{|c|}{1000} & \multicolumn{2}{|c|}{500} & \multicolumn{2}{|c|}{250} & \multicolumn{2}{|c|}{100} & \multicolumn{2}{|c|}{50}\\
+$$ & $$ & $RMSE$ & $T$ & $RMSE$ & $T$ & $RMSE$ & $T$ & $RMSE$ & $T$ & $RMSE$ & $T$ & $RMSE$ & $T$\\
+\hline
+LEBL & Linear  & 3.505 & 2 & 2.884 & 3 & 2.543 & 4 & 2.402 & 4 & 2.368 & 5 & 2.361 & 6\\
+LEBL & Proprosed  & 3.370 & 4 & 2.639 & 6 & 2.500 & 7 & 2.386 & 8 & 2.343 & 10 & 2.348 & 11\\
+LEBL & Lund's & 3.141 & 5 & 2.597 & 7 & 2.600 & 14 & 2.573 & 14 & 2.553 & 14 & 2.555 & 14\\
+\hline
+ZBAA & Linear  & 5.963 & 2 & 4.772 & 3 & 4.203 & 3 & 3.911 & 5 & 3.689 & 6 & 3.679 & 8\\
+ZBAA & Proposed  & 5.563 & 4 & 4.399 & 5 & 3.880 & 7 & 3.635 & 8 & 3.549 & 11 & 3.551 & 14\\
+ZBAA & Lund's & 5.163 & 5 & 4.181 & 7 & 3.927 & 9 & 3.921 & 12 & 3.923 & 16 & 3.922 & 19\\
+\hline
+LFPG & Linear  & 4.708 & 2 & 4.073 & 3 & 3.898 & 4 & 3.797 & 5 & 3.764 & 6 & 3.767 & 8\\
+LFPG & Proposed  & 4.615 & 4 & 4.078 & 6 & 3.897 & 6 & 3.765 & 9 & 3.730 & 11 & 3.737 & 13\\
+LFPG & Lund's & 4.513 & 5 & 4.070 & 8 & 3.916 & 11 & 3.885 & 14 & 3.880 & 18 & 3.889 & 19\\
+\hline
+EDDT & Linear  & 5.166 & 2 & 4.452 & 3 & 4.275 & 4 & 4.147 & 5 & 4.119 & 7 & 4.120 & 8\\
+EDDT & Proposed & 4.973 & 4 & 4.362 & 5 & 4.232 & 6 & 4.094 & 9 & 4.074 & 12 & 4.076 & 14\\
+EDDT & Lund's & 4.854 & 5 & 4.374 & 7 & 4.266 & 10 & 4.157 & 15 & 4.137 & 18 & 4.138 & 22\\
+\hline
+\end{tabular}
+\end{center}
+\end{table*}
+
+\begin{figure}
+  \includegraphics[width=8cm]{airports_fig.png}
+\caption{RMSE values for the airport of Beijing comparing the accuracy of the output for different maximum leaf sizes.}
+\label{f_tbn2}
+\end{figure}
+
+Table \ref{t5} contains the resulting RMSE values and CPU times for each tree and Figure \ref{f_tbn2} represents the evolution of the RMSE value as the size of the maximum leaf parameter is decreased.
+
+\subsection{Analysis of experimental results}
+
+Tables \ref{t4} and \ref{t5} contain the RMSE values and CPU times for the experiments performed on the orbital and meteorological data sets previously discussed.
+
+Looking at the RMSE values first, it can be noted that for large values of "maximum leaf size" both circular methodologies outperform the classical linear one. When progressing into deeper levels of the tree, all three methodologies show a gain in accuracy but at different paces. Lund's method shows the best accuracy results for the first splits. However, the rate at which accuracy improves gets flat at mid depths, resulting in poorer results for the deeper trees when compared to the other two methodologies. 
+
+This difference in the behaviour of Lund's methodology comes from its non-continuous splits generation. As previously discussed non-contiguous splits broaden the search space of the tree but come with the problem of the poor generalisation of the fragmented partitions in further splits. Figure \ref{f3} contains a graphical representation of this fact, in which some nodes contain data spread between different regions. Partitioned data are usually less correlated than contiguous and provides a worse generalisation of the containing subset. 
+
+A non-parametric Friedman test is used to control the variability between methodologies. For each leaf size, the methodology proposed by \citep{Demsar2006} is used to assess the statistical significance of the differences between algorithms. For each leaf size, the methodology proposed by \citep{Demsar2006} is used to assess the statistical significance of the differences between algorithms. The null hypothesis of similarity is rejected for each leaf size; this justifies the use of post-hoc bivariate tests (Nemenyi test, in our case), which assess the statistical difference between pairs of algorithms. The results of this test can be graphically expressed using Critical Difference (CD) diagrams.
+
 The Nemenyi test pairwise compares every methodology. The accuracy of two methodologies is significantly different if the corresponding average rank differs by at least the critical difference. Figure \ref{f7} contains a representation of the results of the Nemenyi test comparing RMSE results for the three methodologies, one test per leaf size. These tests have been performed using the \textit{scmamp} R package publicly available at the Comprehensive R Archive Network (CRAN) \citep{Calvo2015}. Figure \ref{f7} represents the results of this test for a significance level $ p < 0.05 $ making use of CD diagrams.  These diagrams connect the groups of algorithms that are not significantly different, or in other words, whose distance is less than the critical difference, shown above the graph. As can be seen in the diagrams shown in Figure \ref{f7}, the proposed methodology outperforms the other two. Note that higher ranked algorithms in CD diagrams imply lower RMSE values.
+
+Tables \ref{t4} and \ref{t5} also contain the CPU times to train the different versions of trees. The linear method shows the best computational efficiency results. The search space for this method is smaller than the one considered by the circular methods. The proposed methodology has the overhead of considering a bigger search space of $\mathcal{O}(n^2)$ the first time it splits a circular variable. This overhead can be assumed as a constant once all input circular variables have been split and further splits are performed in comparable times $\mathcal{O}(n)$ to the linear version. Lund's methodology, on the other hand considers the extended space for circular variables each time. This implies extra computational times of $\mathcal{O}(n^2)$ at any depth of the tree, so the differences in computational time with the linear and proposed methods will grow as deeper trees are considered.
+
+It is worth mentioning that execution times are highly dependent on the architecture of the computer executing the code. The CPU times represented in Table \ref{t4} correspond to a desktop with a 3.2 GHz Intel Core i3 processor. The ratios between CPU times for the different experiments should be in the same order, regardless of the execution environment.
+
+The main improvement in our methodology over the previous circular trees is that once a circular variable has been selected to create a split in a node, all subsequent splits traverse that variable in linear time instead of quadratic. The sooner circular variables are used to generate splits in a tree, the more efficient it will be. Data sets containing circular variables which are poorly correlated to the target variable require long computations, as they will not be used to create splits at any node of the tree.
+
 
 \begin{figure}
 \centering
@@ -564,10 +545,6 @@ The Nemenyi test pairwise compares every methodology. The accuracy of two method
 \caption{Critical Difference figures comparing the three methodologies for the different leave sizes.}
 \label{f7}
 \end{figure}
-
-One of the most significant aspects of these results is the different evolution, for each compared method, for the various maximum leaf sizes considered. For most of the airports, both the classic linear and the proposed methodologies improve their accuracy as the maximum leaf size is reduced. On the other hand, Lund's method presents no difference or degrades as the leaf size is reduced. This is a sign of poor generalisation of the splits lower down in the tree. Tests to detect the nature of this problem show that the error at training time also increases for this data set. This suggests that the use of non-contiguous splits for circular variables do not provide a good generalisation for subsequent splits performed by the tree.
-
-Table \ref{t4} also reflects the differences in computational time. The proposed circular regression tree methodology offers a substantial reduction in computational efficiency when compared to Lund's proposal. The main improvement in our methodology over the previous circular trees is that once a circular variable has been selected to create a split in a node, all subsequent splits traverse that variable in linear time instead of quadratic. The sooner circular variables are used to generate splits in a tree, the more efficient it will be. Data sets containing circular variables which are poorly correlated to the target variable require long computations, as they will not be used to create splits at any node of the tree. 
 
 \section{Conclusion and Future Work}
 \label{sec:5}
