@@ -216,7 +216,7 @@ findings of the article. It should  include 3 to 5 bullet points
 
 \author[1]{Pablo \snm{Rozas Larraondo}\corref{cor1}}
 \cortext[cor1]{Corresponding author:
-  Tel.: +61-0414090095;}
+  Tel.: +61 (02) 6125 3211;}
 \ead{pablo.larraondo@anu.edu.au}
 \author[2]{I\~naki \snm{Inza}}
 \author[2,3]{Jose A. \snm{Lozano}}
@@ -257,9 +257,9 @@ Circular data are prevalent in many scientific domains, such as earth sciences, 
 
 Most of the current regression machine learning algorithms are focused on modelling the relationships between linear variables. Circular variables have a different nature to linear variables, so traditional methodologies cannot be applied or lead to wrong results in most of the cases.
 
-A decision tree is a predictive model in which a data set is recursively partitioned based on values of the input variables, leading to smaller partitions used to estimate the target variable. A binary tree is a tree data structure in which each node has either two children or none. Classification and Regression Trees (CART) \citep{Breimanetal1984} is one of the most popular versions of binary decision trees to perform regressions. \citep{Lund2002}, introduces a methodology that demonstrates how circular variables can be incorporated into regression trees. The concept of circular regression trees substantially differs from the CART model, introducing a higher complexity and computational cost in the learning phase. 
+A decision tree is a predictive model in which a data set is recursively partitioned based on values of the input variables, leading to smaller partitions used to estimate the target variable. A binary tree is a tree data structure in which each node has either two children or none. Classification and Regression Trees (CART) \citep{Breimanetal1984} is one of the most popular versions of binary decision trees to perform regressions. \citep{Lund2002}, introduces a methodology that demonstrates how circular variables can be incorporated into regression trees. Lund proposal is based on extending the search space for circular variables to consider splits that cross the origin ([360-0] in the case of arc degrees). The concept of circular regression trees substantially differs from the CART model, introducing a higher complexity and computational cost in the learning phase but produces better accuracy results. 
 
-Regression trees have been a popular and effective technique in forecasting linear variables, because of their simplicity and fast training characteristics. As the size of scientific data sets rapidly grows, there is an urgent need to come up with efficient algorithms that are able to cope with this growth. This paper proposes a different methodology to incorporate circular variables into regression trees, reducing the computational cost of Lund's proposal from $\mathcal{O}(n^2)$ to $\mathcal{O}(n)$. This methodology equates the treatment of circular variables to that of linear variables in the CART model. This results in a simpler algorithm and more accurate results.
+Regression trees are a popular and effective methodology, because of their simplicity and fast training characteristics. This paper proposes a different methodology to incorporate circular variables into regression trees, reducing the computational cost of Lund's proposal from $\mathcal{O}(n^2)$ to $\mathcal{O}(n)$. This methodology equates the treatment of circular variables to that of linear variables in the CART model. This results in a simpler algorithm and more accurate results.
 
 This paper is structured as follows: Section 2 contains a detailed description of different ways of generating regression trees for linear and circular variables. The section ends with a comparison between the original and proposed methodology for building circular regression trees. Section 3 contains a series of experiments that compare efficiency and accuracy figures for classic linear regression trees and both versions of circular regression trees. Section 4 contains the conclusions and proposes further lines of investigation.
 
@@ -268,7 +268,9 @@ This paper is structured as follows: Section 2 contains a detailed description o
 
 A circular variable is a numerical variable whose values are constrained into a cyclical space, for example, a variable measuring angles in radians, spans between 0 and 2$ \pi $, where both values represent the same point in space. 
 
-Circular statistics is the field of statistics that studies circular variables. Due to the different nature of circular variables, basic statistics, such as the mean or standard deviation, require different methods than those used for linear variables. For example, if the arithmetic mean formula is used to estimate the mean of the arc degrees with values 1 and 359, the result is (1 + 359)/2 = 180, which is different to the expected 0 or 360. \citep{Fisher1992} presents in his work the statistical methodologies for circular variables.
+Circular statistics is the field of statistics that studies circular variables. Due to the different nature of circular variables, basic statistics, such as the mean or standard deviation, require different methods than those used for linear variables. \citep{Fisher1992} presents in his work statistical methodologies for circular variables. 
+
+The movement of turtles \citep{Fisher1993} or the variations through time of light intensity from the stars \citep{Huerta1999} are examples of domains containing circular variables.
 
 A circular variable defines a circular space. A circular space is cyclic in the sense that it is not bounded; even the notion of a minimum and maximum values does not apply. The distance between two values in the space becomes an ambiguous concept, as it can be measured in clockwise and anticlockwise directions yielding different results. For these reasons, the '$<$' and '$>$' operators are ill defined in circular spaces.
 
@@ -290,7 +292,7 @@ Figure \ref{f1} contains a reproduction of the example used by Breiman to repres
 \begin{figure}
 % Use the relevant command to insert your figure file.
 % For example, with the graphicx package use
-  \includegraphics[width=9cm]{fig1_master.png}
+  \includegraphics[width=9cm]{fig1_master2.png}
 % figure caption is below the figure
 \caption{Example of a classic linear regression tree and a representation of how the space is divided. }
 \label{f1}       % Give a unique label
@@ -308,7 +310,7 @@ Although CART provides a methodology to easily divide the measurement space at t
 \begin{figure}
 % Use the relevant command to insert your figure file.
 % For example, with the graphicx package use
-  \includegraphics[width=9cm]{fig2_master.png}
+  \includegraphics[width=9cm]{fig2_master2.png}
 % figure caption is below the figure
 \caption{Example of a linear regression tree that uses the '$\in$' and '$\notin$' operators and a representation of how the space is divided.}
 \label{f2}       % Give a unique label
@@ -328,7 +330,7 @@ To illustrate how a circular tree partitions the space, a similar example to the
 \begin{figure}
 % Use the relevant command to insert your figure file.
 % For example, with the graphicx package use
-  \includegraphics[width=9cm]{fig3_master.png}
+  \includegraphics[width=9cm]{fig3_master2.png}
 % figure caption is below the figure
 \caption{Example of a circular regression tree as formulated by Lund and a representation of how the space is divided.}
 \label{f3}       % Give a unique label
@@ -336,26 +338,26 @@ To illustrate how a circular tree partitions the space, a similar example to the
 %
 
 
-Figure \ref{f3} shows an example of how a circular tree partitions the space defined by one linear and one circular variables. As in Figure \ref{f2}, the space is divided in non-contiguous regions along both its axes. In this example, node $t_9$ contains data corresponding to four different regions of the space, which might limit the possibilities of finding subsequent good splits, as the correlation between these regions might not be as high as the one found in a contiguous region for other variables. 
+Figure \ref{f3} shows an example of how a circular tree partitions the space defined by one linear and one circular variables. As in Figure \ref{f2}, the space is divided in non-contiguous regions along both its axes. In this example, node $t_9$ contains data corresponding to four different regions of the space. This 4 regions result from two consecutive splits that produce non-contiguous regions. The correlation between these regions might not be as high as the one found in a contiguous region which might limit the possibilities of finding subsequent good splits. 
 
 Non-contiguous splits generate partitions in which distant parts of a data set are aggregated into the same node. For example, Figure \ref{f3} displays data corresponding to node $t_5$ split at both ends of axis $x_1$. Intuitively, data inside these two separated regions might not be as well correlated as the data delimited by a single contiguous region. As a consequence, nodes containing non-contiguous splits might degenerate in accuracy for successive partitions, when compared to contiguous splits. For the same figure, data belonging to node $t_9$ is partitioned in four different regions. Therefore, the deeper a node is in a tree, the more non-contiguous regions it produces.
 
 The split on space performed by the '$>$' and '$<$' operators in classic linear regression trees can be seen as a particular case of the more general range selection performed by the '$\in$' and '$\notin$' operators in circular trees. The former assumes the bounds of the space to remain constant and finds a value within its range to split it in two contiguous regions. The latter finds an inner sub-region contained in a space, by identifying two delimiter values. These two values also define an outer sub-region, one at each side of the inner one, which is therefore non-contiguous.
 
-The process described in Section 3.1, based on the '$>$' and '$<$' operators, can be seen as a particular case of the more general search in the space performed by the '$\in$' and '$\notin$' operators. Any contiguous split can be seen as a subset in which one of its bounds is shared with the original space. Partitioning the space by using the '$\in$' and '$\notin$' operators generates all the contiguous and non contiguous splits. By considering more options, it has better chances of finding a good partition, at the expense of more computations. The next subsection provides a quantitative comparison between the computational cost of building trees using contiguous and non-contiguous splits.
+The process described in Section 3.1, based on the '$>$' and '$<$' operators, can be seen as a particular case of the more general search in the space performed by the '$\in$' and '$\notin$' operators. Any contiguous split can be seen as a subset in which one of its bounds is shared with the original space. Partitioning the space by using the '$\in$' and '$\notin$' operators generates all the contiguous and non-contiguous splits. By considering more options, it has better chances of finding a good partition, at the expense of more computations. The next subsection provides a quantitative comparison between the computational cost of building trees using contiguous and non-contiguous splits.
 
 For any circular variable, two values are required to define two separate regions. Its first split divides the circular space in two complementary arcs. Once these limits have been defined, values within an arc can be sorted by defining one direction (clockwise or counterclockwise) of traversing the space. Having a sortable space means that the '$>$' and '$<$' operators acquire meaning, and splits can be generated by selecting just one value within an arc.
 
 Non-contiguous spaces appear in circular trees as a consequence of using the same '$\in$' and '$\notin$' operators for subsequent splits of a circular variable. After the first split of a circular variable, once regions have been defined, the splitting method used by classic regression trees can be used to generate contiguous partitioned spaces. This is the essential difference between our proposal and Lund's version of circular regression trees and is the main contribution of this work.
 
-Figure \ref{f4} is a graphical representation of our proposed methodology that generates contiguous circular trees applied to the same example data set. The benefits of generating contiguous splits in regression trees are discussed in the next section, considering differences in computation efficiency and accuracy.
+Figure \ref{f4} is a graphical representation of our proposed methodology that generates contiguous circular trees applied to the same example data set. When comparing the regions produced by the trees on Figures \ref{f3} and \ref{f4} it can be seen that the total number of regions is smaller. Also, Figure \ref{f4} represents the data contained in each leaf of the tree as a uniform contiguous space. This is a considered a good characteristic as data that are closer in the space normally tends to present similar characteristics. The benefits of generating contiguous splits in regression trees are studied in the next section, considering differences in computation efficiency and accuracy for the different methodologies presented.
 
 %
 % For two-column wide figures use
 \begin{figure}
 % Use the relevant command to insert your figure file.
 % For example, with the graphicx package use
-  \includegraphics[width=9cm]{fig4_master.png}
+  \includegraphics[width=9cm]{fig4_master2.png}
 % figure caption is below the figure
 \caption{Example of the proposed circular regression tree and a representation of how the space is divided.}
 \label{f4}       % Give a unique label
@@ -446,7 +448,7 @@ The Orbital Variations and Insolation Database contains the values of the eccent
 Precession and obliquity phases are used as input variables. Each tree generates splits on the dataset based on these two variables to predict solar radiation values. The whole data set contains around 3300 rows and the "maximum leaf size" values used to generate the different versions of each tree are: 2500, 1250, 500 and 250.
 
 \begin{table*}[t]
-\caption{RMSE in predicting Radiation Levels at 65°N and CPU time (T) in seconds for the different 'max leaf size' values and versions of regression trees.}\label{t4}
+\caption{RMSE in predicting Radiation Levels at 65°N and CPU time in seconds (T) for the different 'max leaf size' values and versions of regression trees.}\label{t4}
 \begin{center}
 \begin{tabular}{crrrrrrrr}
 \hline\hline
@@ -480,7 +482,7 @@ Each tree generates partitions to predict observed METAR observed temperature ba
 The input variables Date and Time are transformed into their angular numerical values so that they can be used as circular variables. The following values of "maximum leaf size" are used as inputs to the tree generation process: 2500, 1000, 500, 250, 100, 50.
 
 \begin{table*}[t]
-\caption{Airport meteorology data set RMSE in predicting the observed METAR wind speed and CPU time in seconds for the different airports using the different versions of regression trees.}\label{t5}
+\caption{Airport meteorology data set RMSE in predicting the observed METAR wind speed and CPU time in seconds (T) for the different airports using the different versions of regression trees.}\label{t5}
 \begin{center}
 \begin{tabular}{ccrrrrrrrrrrrr}
 \hline\hline
@@ -520,19 +522,19 @@ Table \ref{t5} contains the resulting RMSE values and CPU times for each tree me
 
 Looking at the RMSE values contained in Tables \ref{t4} and \ref{t5} first, it can be noted that for large values of "maximum leaf size" both circular methodologies outperform the classical linear one. When progressing into deeper levels of the tree, all three methodologies show a gain in accuracy but at different paces. Lund's method shows the best accuracy results for the first splits. However, the rate at which accuracy improves gets flat at mid depths, resulting in poorer results for the deeper trees when compared to the other two methodologies. 
 
-This difference in the behaviour of Lund's methodology comes from its non-continuous splits generation. As previously discussed non-contiguous splits broaden the search space of the tree but come with the problem of the poor generalisation of the fragmented partitions in further splits. Figure \ref{f3} contains a graphical representation of this fact, in which some nodes contain data spread between different regions. Fragmented data are usually less correlated than contiguous data and provides a worse generalisation of the containing subset. 
+This difference in the behaviour of Lund's methodology comes from its non-continuous split generation. As previously discussed non-contiguous splits broaden the search space of the tree but come with the problem of the poor generalisation of the fragmented partitions in further splits. Figure \ref{f3} contains a graphical representation of this fact, in which some nodes contain data spread between different regions. Fragmented data are usually less self correlated than contiguous data and provides a worse generalisation of the containing subset. 
 
-A non-parametric Friedman test is used to control the variability between methodologies. The RMSE results from both data sets are grouped into two categories: shallow and deep trees. The shallow group contains "max leaf size" values of [2500, 1250] for the earth radiation data set and [2500, 1000] for the airport meteorology one. The deep category is formed by sizes [500, 250] of the first data set together with [500, 250, 100, 50] from the second.
+In order to analyse the results, the RMSE results from both data sets are grouped into two groups: shallow and deep trees. The shallow group contains "max leaf size" values of [2500, 1250] for the earth radiation data set and [2500, 1000] for the airport meteorology set. The deep group is formed by sizes [500, 250] of the first data set together with [500, 250, 100, 50] from the airport data set.
 
-For each category, the methodology proposed by \citep{Demsar2006} is used to assess the statistical significance of the differences between algorithms. For each category, the methodology proposed by \citep{Demsar2006} is used to assess the statistical significance of the differences between algorithms. The null hypothesis of similarity is rejected for each leaf size; this justifies the use of post-hoc bivariate tests (Nemenyi test, in our case), which assess the statistical difference between pairs of algorithms. The results of this test can be graphically expressed using Critical Difference (CD) diagrams.
+For each category, the methodology proposed by \citep{Demsar2006} is used to assess the statistical significance of the differences between algorithms. For each category, the methodology proposed by \citep{Demsar2006} is used to assess the statistical significance of the differences between algorithms. The null hypothesis of similarity is rejected for both shallow and deep trees; this justifies the use of post-hoc bivariate tests (Nemenyi test, in our case), which assess the statistical difference between pairs of algorithms. The results of this test can be graphically expressed using Critical Difference (CD) diagrams.
 
-The Nemenyi test pairwise compares every methodology. The accuracy of two methodologies is significantly different if the corresponding average rank differs by at least the critical difference. Figure \ref{f7} contains a representation of the results of the Nemenyi test comparing RMSE results for the three methodologies, one test for the case of shallow trees and another one for deep trees. These tests have been performed using the \textit{scmamp} R package publicly available at the Comprehensive R Archive Network (CRAN) \citep{Calvo2015}. Figure \ref{f7} represents the results of this test for a significance level $ p < 0.05 $ making use of CD diagrams.  These diagrams connect the groups of algorithms that are not significantly different, or in other words, whose distance is less than the critical difference, shown above the graph. As can be seen in the diagrams shown in Figure \ref{f7}, the proposed methodology has a comparable accuracy to Lund's proposal for shallow trees and outperforms the other two for the deep tree case. Note that higher ranked algorithms in CD diagrams imply lower RMSE values.
+The Nemenyi test pairwise compares every methodology. The accuracy of two methodologies is considered significantly different if the corresponding average rank differs by at least the critical difference. Figure \ref{f7} contains a representation of the results of the Nemenyi test comparing RMSE results for the three methodologies for shallow and deep trees. These tests have been performed using the \textit{scmamp} R package publicly available at the Comprehensive R Archive Network (CRAN) \citep{Calvo2015}. Figure \ref{f7} represents the results of this test for a significance level $ p < 0.05 $ making use of CD diagrams.  These diagrams connect the groups of algorithms that are not significantly different, or in other words, whose distance is less than the fixed critical difference, shown above the graph. Note that higher ranked algorithms in CD diagrams imply lower RMSE values. As can be seen in the diagrams shown in Figure \ref{f7}, the proposed methodology has a comparable accuracy to Lund's proposal for shallow trees and statistically outperforms the other two for the deep tree case. This results corroborate our experimental hypothesis, as the non-contiguous splits of the methodology proposed by Lund tend to degenerate as deeper partitions are considered.
 
-Tables \ref{t4} and \ref{t5} also contain the CPU times (in seconds) to train the different versions of trees. The linear method shows the best computational efficiency results. The search space for this method is smaller than the one considered by the circular methods. The proposed circular methodology has the overhead of considering a bigger search space of $\mathcal{O}(n^2)$ the first time it splits a circular variable. This overhead can be assumed as a constant once all input circular variables have been split and further contiguous splits are performed in comparable times $\mathcal{O}(n)$ to the linear version. Lund's methodology, on the other hand considers the extended space for circular variables each time. This implies extra computational times of $\mathcal{O}(n^2)$ at any depth of the tree, so the differences in computational time with the linear and proposed methods grow, as deeper trees are considered.
+Tables \ref{t4} and \ref{t5} also contain the CPU times (in seconds) to train the different versions of trees. The linear method shows the best computational efficiency results. The search space for this method is smaller $\mathcal{O}(n)$ than the one considered by the circular methods. The proposed circular methodology has the overhead of considering a bigger search space of $\mathcal{O}(n^2)$ the first time it splits a circular variable. This overhead can be assumed as constant once all input circular variables have been split and further contiguous splits are performed in comparable times $\mathcal{O}(n)$ to the linear version. Lund's methodology, on the other hand, considers the extended space for circular variables each time. This implies extra computational times of $\mathcal{O}(n^2)$ at any depth of the tree, so the differences in computational time with the linear and proposed methods grow, as deeper trees are considered.
 
-The CPU times represented in Table \ref{t4} correspond to a desktop with a 3.2 GHz Intel Core i3 processor. The ratios between CPU times for the different experiments should be constant, regardless of the execution environment.
+The CPU times represented in Table \ref{t4} correspond to a desktop with a 3.2 GHz Intel Core i3 processor.
 
-The main improvement in our methodology over Lund's circular trees is that once a circular variable has been selected to create a split in a node, all subsequent splits traverse that variable in linear time instead of quadratic. The sooner circular variables are used to generate splits in a tree, the more efficient it will be. Data sets containing circular variables which are poorly correlated to the target variable require long computations, as they will not be used to create splits at any node of the tree.
+The main benefit of our methodology over Lund's circular trees is that once a circular variable has been selected to create a split in a node, all subsequent splits traverse the variable in linear time instead of quadratic. The sooner circular variables are used to generate splits in a tree, the more efficient it will be. Data sets containing circular variables which are poorly correlated to the target variable require long computations, as they will not be used to create splits at any node of the tree.
 
 
 \begin{figure}
@@ -546,7 +548,7 @@ The main improvement in our methodology over Lund's circular trees is that once 
 
 \section{Conclusion and Future Work}
 \label{sec:5}
-This work revisits the paradigm of circular regression trees, presenting a new methodology that improves accuracy and computational efficiency. Our proposal introduces the novelty of creating contiguous splits for the circular variables in a regression tree. The concept of the splits generating contiguous regions is inspired by how classical regression tree fragment the space. Despite non contiguous splits being a more expressive way of partitioning a data set, they can suffer from poor generalisation. Contiguous splits also benefit from improved computational efficiencies.
+This work revisits the paradigm of circular regression trees, presenting a new methodology that improves accuracy and computational efficiency. Our proposal introduces the novelty of creating contiguous splits for the circular variables in a regression tree. The concept of the splits generating contiguous regions is inspired by how classical regression tree fragment the space. Despite non-contiguous splits being a more expressive way of partitioning a data set, they can suffer from poor generalisation. Contiguous splits also benefit from improved computational efficiencies.
 
 This paper explores the fundamental differences in partitioning the space used by regression trees. Regression trees have evolved with the introduction of many different techniques to improve efficiency. Well known techniques such as pruning, balancing, smoothing \citep{Breimanetal1984, Quinlan1993} or ensembles \citep{Buhlmann2012} can remarkably improve the accuracy of results when compared to basic regression trees.
 
